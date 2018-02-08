@@ -21,10 +21,10 @@ export LISTEN_PORT=$(echo "${LISTEN_PORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
 if [[ ! -z "${LISTEN_PORT}" ]]; then
 	echo "[info] LISTEN_PORT defined as '${LISTEN_PORT}'" | ts '%Y-%m-%d %H:%M:%.S'
-	echo "Make sure you changed the 443 port in container settings to expose the port you selected!" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "Make sure you changed the 4443 port in container settings to expose the port you selected!" | ts '%Y-%m-%d %H:%M:%.S'
 else
-	echo "[warn] LISTEN_PORT not defined,(via -e LISTEN_PORT), defaulting to '443'" | ts '%Y-%m-%d %H:%M:%.S'
-	export LISTEN_PORT="443"
+	echo "[warn] LISTEN_PORT not defined,(via -e LISTEN_PORT), defaulting to '4443'" | ts '%Y-%m-%d %H:%M:%.S'
+	export LISTEN_PORT="4443"
 fi
 
 export TUNNEL_MODE=$(echo "${TUNNEL_MODE}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
@@ -97,6 +97,10 @@ echo "no-route=192.168.0.0/255.255.0.0" >> /config/ocserv.conf
 echo "no-route=10.0.0.0/255.0.0.0" >> /config/ocserv.conf
 echo "no-route=172.16.0.0/255.240.0.0" >> /config/ocserv.conf
 echo "no-route=127.0.0.0/255.0.0.0" >> /config/ocserv.conf
+
+if [[ ${LISTEN_PORT} != "4443" ]]; then
+	sed -i 's/^no-route/#no-route/' /config/ocserv.conf
+fi
 
 if [[ ${TUNNEL_MODE} == "all" ]]; then
 	echo "[info] Tunneling all traffic through VPN" | ts '%Y-%m-%d %H:%M:%.S'
