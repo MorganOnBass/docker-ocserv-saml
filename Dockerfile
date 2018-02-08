@@ -50,6 +50,8 @@ RUN buildDeps=" \
 	&& apk del .build-deps \
 	&& rm -rf /var/cache/apk/*
 
+RUN apk add cockpit
+
 WORKDIR /config/ocserv
 
 COPY docker-entrypoint.sh /entrypoint.sh
