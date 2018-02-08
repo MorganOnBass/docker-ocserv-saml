@@ -91,15 +91,8 @@ if [[ ${SPLIT_DNS} == "yes" ]]; then
 fi
 
 
-##### Process Variables #####
-# Add Default No-Routes
-echo "no-route=192.168.0.0/255.255.0.0" >> /config/ocserv.conf
-echo "no-route=10.0.0.0/255.0.0.0" >> /config/ocserv.conf
-echo "no-route=172.16.0.0/255.240.0.0" >> /config/ocserv.conf
-echo "no-route=127.0.0.0/255.0.0.0" >> /config/ocserv.conf
-
 if [[ ${LISTEN_PORT} != "4443" ]]; then
-	sed -i 's/^no-route/#no-route/' /config/ocserv.conf
+	sed -i 's/4443/443/' /config/ocserv.conf
 fi
 
 if [[ ${TUNNEL_MODE} == "all" ]]; then
