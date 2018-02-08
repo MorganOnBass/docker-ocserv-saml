@@ -50,9 +50,9 @@ RUN buildDeps=" \
 	&& apk del .build-deps \
 	&& rm -rf /var/cache/apk/*
 	
-ADD ocserv/ /etc/ocserv
-
 RUN apk add --update bash
+
+ADD ocserv/ /etc/ocserv
 
 WORKDIR /config/ocserv
 
