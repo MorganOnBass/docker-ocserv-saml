@@ -28,8 +28,8 @@ RUN buildDeps=" \
 	&& apk add --update --virtual .build-deps $buildDeps \
 	&& curl -SL "ftp://ftp.infradead.org/pub/ocserv/ocserv-$OC_VERSION.tar.xz" -o ocserv.tar.xz \
 	&& curl -SL "ftp://ftp.infradead.org/pub/ocserv/ocserv-$OC_VERSION.tar.xz.sig" -o ocserv.tar.xz.sig \
-	&& gpg --keyserver pgp.mit.edu --recv-key 7F343FA7 \
-	&& gpg --keyserver pgp.mit.edu --recv-key 96865171 \
+	&& gpg --keyserver pool.sks-keyservers.net --recv-key 7F343FA7 \
+	&& gpg --keyserver pool.sks-keyservers.net --recv-key 96865171 \
 	&& gpg --verify ocserv.tar.xz.sig \
 	&& mkdir -p /usr/src/ocserv \
 	&& tar -xf ocserv.tar.xz -C /usr/src/ocserv --strip-components=1 \
