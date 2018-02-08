@@ -59,4 +59,4 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 4443
 EXPOSE 4443/udp
-CMD ["ocserv", "-c", "/config/ocserv.conf", "-f"]
+CMD ["ocserv", "-c", "/etc/ocserv/ocserv.conf", "-f"]
