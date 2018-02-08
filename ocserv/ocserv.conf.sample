@@ -47,7 +47,7 @@
 #auth = "pam"
 #auth = "pam[gid-min=1000]"
 #auth = "plain[passwd=./sample.passwd,otp=./sample.otp]"
-auth = "plain[passwd=./sample.passwd]"
+auth = "plain[passwd=/config/ocpasswd]"
 #auth = "certificate"
 #auth = "radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true]"
 
@@ -124,8 +124,8 @@ socket-file = /var/run/ocserv-socket
 #
 # There may be multiple server-cert and server-key directives,
 # but each key should correspond to the preceding certificate.
-server-cert = ../tests/certs/server-cert.pem
-server-key = ../tests/certs/server-key.pem
+server-cert = /config/certs/server-cert.pem
+server-key = /config/certs/server-key.pem
 
 # Diffie-Hellman parameters. Only needed if you require support
 # for the DHE ciphersuites (by default this server supports ECDHE).
@@ -178,11 +178,11 @@ isolate-workers = true
 
 # Limit the number of clients. Unset or set to zero for unlimited.
 #max-clients = 1024
-max-clients = 16
+max-clients = 0
 
 # Limit the number of identical clients (i.e., users connecting
 # multiple times). Unset or set to zero for unlimited.
-max-same-clients = 2
+max-same-clients = 10
 
 # When the server receives connections from a proxy, like haproxy
 # which supports the proxy protocol, set this to obtain the correct
@@ -265,13 +265,13 @@ cert-user-oid = 0.9.2342.19200300.100.1.1
 #crl = /path/to/crl.pem
 
 # Uncomment this to enable compression negotiation (LZS, LZ4).
-#compression = true
+compression = true
 
 # Set the minimum size under which a packet will not be compressed.
 # That is to allow low-latency for VoIP packets. The default size
 # is 256 bytes. Modify it if the clients typically use compression
 # as well of VoIP with codecs that exceed the default value.
-#no-compress-limit = 256
+no-compress-limit = 256
 
 # GnuTLS priority string; note that SSL 3.0 is disabled by default
 # as there are no openconnect (and possibly anyconnect clients) using
@@ -398,8 +398,8 @@ rekey-method = ssl
 # STATS_BYTES_OUT, STATS_DURATION that contain a 64-bit counter of the bytes
 # output from the tun device, and the duration of the session in seconds.
 
-#connect-script = /usr/bin/myscript
-#disconnect-script = /usr/bin/myscript
+connect-script = /etc/ocserv/connect.sh
+disconnect-script = /etc/ocserv/disconnect.sh
 
 # UTMP
 # Register the connected clients to utmp. This will allow viewing
@@ -446,7 +446,7 @@ default-domain = example.com
 # Note that, you could use addresses from a subnet of your LAN network if you
 # enable proxy arp in the LAN interface (see http://infradead.org/ocserv/recipes-ocserv-pseudo-bridge.html);
 # in that case it is recommended to set ping-leases to true.
-ipv4-network = 192.168.1.0
+ipv4-network = 192.168.255.0
 ipv4-netmask = 255.255.255.0
 
 # An alternative way of specifying the network:
@@ -469,7 +469,7 @@ ipv4-netmask = 255.255.255.0
 # The advertized DNS server. Use multiple lines for
 # multiple servers.
 # dns = fc00::4be0
-dns = 192.168.1.2
+# dns = 192.168.1.2
 
 # The NBNS server (if any)
 #nbns = 192.168.1.3
@@ -508,15 +508,15 @@ ping-leases = false
 # comment out all routes from the server, or use the special keyword
 # 'default'.
 
-route = 10.10.10.0/255.255.255.0
-route = 192.168.0.0/255.255.0.0
+#route = 10.10.10.0/255.255.255.0
+#route = 192.168.0.0/255.255.0.0
 #route = fef4:db8:1000:1001::/64
 #route = default
 
 # Subsets of the routes above that will not be routed by
 # the server.
 
-no-route = 192.168.5.0/255.255.255.0
+#no-route = 192.168.5.0/255.255.255.0
 
 # Note the that following two firewalling options currently are available
 # in Linux systems with iptables software.
@@ -667,3 +667,8 @@ dtls-legacy = true
 # the openconnect mailing list. The special keywords '%{U}'
 # and '%{G}', if present will be replaced by the username and group name.
 #custom-header = "X-My-Header: hi there"
+
+no-route=192.168.0.0/255.255.0.0
+no-route=10.0.0.0/255.0.0.0
+no-route=172.16.0.0/255.240.0.0
+no-route=127.0.0.0/255.0.0.0
