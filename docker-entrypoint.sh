@@ -119,6 +119,7 @@ if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
 
 		echo "[info] Adding split-dns = ${split_domain_item} to ocserv.conf" | ts '%Y-%m-%d %H:%M:%.S'
 		echo "split-dns = ${split_domain_item}" >> /config/ocserv.conf
+	done
 fi
 
 if [ ! -f /config/certs/server-key.pem ] || [ ! -f /config/certs/server-cert.pem ]; then
