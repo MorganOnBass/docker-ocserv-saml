@@ -54,7 +54,7 @@ RUN apk add --update bash
 
 ADD ocserv/ /etc/ocserv
 
-WORKDIR /config/ocserv
+#WORKDIR /config/ocserv
 
 COPY docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
