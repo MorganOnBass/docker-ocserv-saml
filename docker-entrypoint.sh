@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Copy sample config if one doesnt exist
 if [[ ! -e /config/ocserv.conf]]; then
