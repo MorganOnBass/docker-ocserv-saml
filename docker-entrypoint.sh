@@ -69,8 +69,8 @@ if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
 fi
 
 
-if [[ ${LISTEN_PORT} != "4443" ]]; then
-	sed -i 's/4443/443/' /config/ocserv.conf
+if [ ${LISTEN_PORT} != "4443" ]; then
+	sed -i "s/4443/${LISTEN_PORT}/" /config/ocserv.conf
 fi
 
 if [[ ${TUNNEL_MODE} == "all" ]]; then
