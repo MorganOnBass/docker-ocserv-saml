@@ -9,7 +9,6 @@ ENV OC_VERSION=0.11.10
 
 # Install dependencies
 RUN buildDeps=" \
-		bash \
 		curl \
 		g++ \
 		gnutls-dev \
