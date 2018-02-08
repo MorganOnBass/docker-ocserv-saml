@@ -100,7 +100,7 @@ udp-port = 443
 # The user the worker processes will be run as. It should be
 # unique (no other services run as this user).
 run-as-user = nobody
-run-as-group = daemon
+run-as-group = users
 
 # socket file used for IPC with occtl. You only need to set that,
 # if you use more than a single servers.
