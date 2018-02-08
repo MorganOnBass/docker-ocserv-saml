@@ -58,24 +58,13 @@ if [[ ! -z "${DNS_SERVERS}" ]]; then
 		export DNS_SERVERS="8.8.8.8,37.235.1.174,8.8.4.4,37.235.1.177"
 fi
 
-# strip whitespace from start and end of SPLIT_DNS
-export SPLIT_DNS=$(echo "${SPLIT_DNS}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-# Check SPLIT_DNS env var
-if [[ ! -z "${SPLIT_DNS}" ]]; then
-	echo "[info] SPLIT_DNS defined as '${SPLIT_DNS}'" | ts '%Y-%m-%d %H:%M:%.S'
-else
-	echo "[warn] SPLIT_DNS not defined,(via -e SPLIT_DNS), defaulting to 'no'" | ts '%Y-%m-%d %H:%M:%.S'
-	export SPLIT_DNS="no"
-fi
-
-if [[ ${SPLIT_DNS} == "yes" ]]; then
-	# strip whitespace from start and end of SPLIT_DNS_DOMAINS
-	export SPLIT_DNS_DOMAINS=$(echo "${SPLIT_DNS_DOMAINS}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-	# Check SPLIT_DNS_DOMAINS env var and exit if not defined
+export SPLIT_DNS_DOMAINS=$(echo "${SPLIT_DNS_DOMAINS}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
+	# Check SPLIT_DNS_DOMAINS env var
 	if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
 		echo "[info] SPLIT_DNS_DOMAINS defined as '${SPLIT_DNS_DOMAINS}'" | ts '%Y-%m-%d %H:%M:%.S'
 	else
-		echo "[err] SPLIT_DNS_DOMAINS not defined (via -e SPLIT_DNS_DOMAINS), but SPLIT_DNS is defined as yes" | ts '%Y-%m-%d %H:%M:%.S' && exit 1
+		echo "[err] SPLIT_DNS_DOMAINS not defined (via -e SPLIT_DNS_DOMAINS)" | ts '%Y-%m-%d %H:%M:%.S' && exit 1
 	fi
 fi
 
@@ -119,7 +108,7 @@ for name_server_item in "${name_server_list[@]}"; do
 done
 
 # Process SPLIT_DNS env var
-if [[ $SPLIT_DNS == "yes" ]]; then
+if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
 	# split comma seperated string into list from SPLIT_DNS_DOMAINS env variable
 	IFS=',' read -ra split_domain_list <<< "${SPLIT_DNS_DOMAINS}"
 	# process name servers in the list
@@ -141,7 +130,7 @@ if [ ! -f /config/certs/server-key.pem ] || [ ! -f /config/certs/server-cert.pem
 	fi
 
 	if [ -z "$CA_ORG" ]; then
-		CA_ORG="Big Corp"
+		CA_ORG="OCSERV"
 	fi
 
 	if [ -z "$CA_DAYS" ]; then
@@ -149,7 +138,7 @@ if [ ! -f /config/certs/server-key.pem ] || [ ! -f /config/certs/server-cert.pem
 	fi
 
 	if [ -z "$SRV_CN" ]; then
-		SRV_CN="www.example.com"
+		SRV_CN="vpn.example.com"
 	fi
 
 	if [ -z "$SRV_ORG" ]; then
