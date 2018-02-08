@@ -9,32 +9,32 @@ fi
 export LISTEN_PORT=$(echo "${LISTEN_PORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
 if [[ ! -z "${LISTEN_PORT}" ]]; then
-	echo "[info] LISTEN_PORT defined as '${LISTEN_PORT}'" | ts '%Y-%m-%d %H:%M:%.S'
-	echo "Make sure you changed the 4443 port in container settings to expose the port you selected!" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "$(date) [info] LISTEN_PORT defined as '${LISTEN_PORT}'"
+	echo "Make sure you changed the 4443 port in container settings to expose the port you selected!"
 else
-	echo "[warn] LISTEN_PORT not defined,(via -e LISTEN_PORT), defaulting to '4443'" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "$(date) [warn] LISTEN_PORT not defined,(via -e LISTEN_PORT), defaulting to '4443'"
 	export LISTEN_PORT="4443"
 fi
 
 export TUNNEL_MODE=$(echo "${TUNNEL_MODE}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
 if [[ ! -z "${TUNNEL_MODE}" ]]; then
-	echo "[info] TUNNEL_MODE defined as '${TUNNEL_MODE}'" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "$(date) [info] TUNNEL_MODE defined as '${TUNNEL_MODE}'"
 else
-	echo "[warn] TUNNEL_MODE not defined,(via -e TUNNEL_MODE), defaulting to 'all'" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "$(date) [warn] TUNNEL_MODE not defined,(via -e TUNNEL_MODE), defaulting to 'all'"
 	export TUNNEL_MODE="all"
 fi
 
 if [[ ${TUNNEL_MODE} == "all" ]]; then
-	echo "[info] Tunnel mode is all, ignoring TUNNEL_ROUTES. If you want to define specific routes, change TUNNEL_MODE to split-include" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "$(date) [info] Tunnel mode is all, ignoring TUNNEL_ROUTES. If you want to define specific routes, change TUNNEL_MODE to split-include"
 elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 	# strip whitespace from start and end of SPLIT_DNS_DOMAINS
 	export TUNNEL_ROUTES=$(echo "${TUNNEL_ROUTES}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 	# Check SPLIT_DNS_DOMAINS env var and exit if not defined
 	if [[ ! -z "${TUNNEL_ROUTES}" ]]; then
-		echo "[info] TUNNEL_ROUTES defined as '${TUNNEL_ROUTES}'" | ts '%Y-%m-%d %H:%M:%.S'
+		echo "$(date) [info] TUNNEL_ROUTES defined as '${TUNNEL_ROUTES}'"
 	else
-		echo "[err] TUNNEL_ROUTES not defined (via -e TUNNEL_ROUTES), but TUNNEL_MODE is defined as split-include" | ts '%Y-%m-%d %H:%M:%.S' && exit 1
+		echo "$(date) [err] TUNNEL_ROUTES not defined (via -e TUNNEL_ROUTES), but TUNNEL_MODE is defined as split-include"
 	fi
 fi
 
@@ -42,9 +42,9 @@ fi
 export PROXY_SUPPORT=$(echo "${PROXY_SUPPORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
 if [[ ! -z "${PROXY_SUPPORT}" ]]; then
-	echo "[info] PROXY_SUPPORT defined as '${PROXY_SUPPORT}'" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "$(date) [info] PROXY_SUPPORT defined as '${PROXY_SUPPORT}'"
 else
-	echo "[warn] PROXY_SUPPORT not defined,(via -e PROXY_SUPPORT), defaulting to 'no'" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "$(date) [warn] PROXY_SUPPORT not defined,(via -e PROXY_SUPPORT), defaulting to 'no'"
 	export PROXY_SUPPORT="no"
 fi
 
@@ -52,9 +52,9 @@ fi
 export DNS_SERVERS=$(echo "${DNS_SERVERS}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check DNS_SERVERS env var
 if [[ ! -z "${DNS_SERVERS}" ]]; then
-		echo "[info] DNS_SERVERS defined as '${DNS_SERVERS}'" | ts '%Y-%m-%d %H:%M:%.S'
+		echo "$(date) [info] DNS_SERVERS defined as '${DNS_SERVERS}'"
 	else
-		echo "[warn] DNS_SERVERS not defined (via -e DNS_SERVERS), defaulting to Google and FreeDNS name servers" | ts '%Y-%m-%d %H:%M:%.S'
+		echo "$(date) [warn] DNS_SERVERS not defined (via -e DNS_SERVERS), defaulting to Google and FreeDNS name servers"
 		export DNS_SERVERS="8.8.8.8,37.235.1.174,8.8.4.4,37.235.1.177"
 fi
 
@@ -62,9 +62,9 @@ export SPLIT_DNS_DOMAINS=$(echo "${SPLIT_DNS_DOMAINS}" | sed -e 's~^[ \t]*~~;s~[
 if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
 	# Check SPLIT_DNS_DOMAINS env var
 	if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
-		echo "[info] SPLIT_DNS_DOMAINS defined as '${SPLIT_DNS_DOMAINS}'" | ts '%Y-%m-%d %H:%M:%.S'
+		echo "$(date) [info] SPLIT_DNS_DOMAINS defined as '${SPLIT_DNS_DOMAINS}'"
 	else
-		echo "[err] SPLIT_DNS_DOMAINS not defined (via -e SPLIT_DNS_DOMAINS)" | ts '%Y-%m-%d %H:%M:%.S' && exit 1
+		echo "$(date) [err] SPLIT_DNS_DOMAINS not defined (via -e SPLIT_DNS_DOMAINS)"
 	fi
 fi
 
@@ -74,9 +74,9 @@ if [ ${LISTEN_PORT} != "4443" ]; then
 fi
 
 if [[ ${TUNNEL_MODE} == "all" ]]; then
-	echo "[info] Tunneling all traffic through VPN" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "$(date) [info] Tunneling all traffic through VPN"
 elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
-	echo "[info] Tunneling routes $TUNNEL_ROUTES through VPN" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "$(date) [info] Tunneling routes $TUNNEL_ROUTES through VPN"
 	# split comma seperated string into list from NAME_SERVERS env variable
 	IFS=',' read -ra tunnel_route_list <<< "${TUNNEL_ROUTES}"
 	# process name servers in the list
@@ -84,7 +84,7 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 		# strip whitespace from start and end of lan_network_item
 		tunnel_route_item=$(echo "${tunnel_route_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-		echo "[info] Adding route=${tunnel_route_item} to ocserv.conf" | ts '%Y-%m-%d %H:%M:%.S'
+		echo "$(date) [info] Adding route=${tunnel_route_item} to ocserv.conf"
 		echo "route=${tunnel_route_item}" >> /config/ocserv.conf
 	done
 fi
@@ -104,7 +104,7 @@ for name_server_item in "${name_server_list[@]}"; do
 	# strip whitespace from start and end of lan_network_item
 	name_server_item=$(echo "${name_server_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-	echo "[info] Adding dns = ${name_server_item} to ocserv.conf" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "$(date) [info] Adding dns = ${name_server_item} to ocserv.conf"
 	echo "dns = ${name_server_item}" >> /config/ocserv.conf
 done
 
@@ -117,14 +117,14 @@ if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
 		# strip whitespace from start and end of lan_network_item
 		split_domain_item=$(echo "${split_domain_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-		echo "[info] Adding split-dns = ${split_domain_item} to ocserv.conf" | ts '%Y-%m-%d %H:%M:%.S'
+		echo "$(date) [info] Adding split-dns = ${split_domain_item} to ocserv.conf"
 		echo "split-dns = ${split_domain_item}" >> /config/ocserv.conf
 	done
 fi
 
 if [ ! -f /config/certs/server-key.pem ] || [ ! -f /config/certs/server-cert.pem ]; then
 	# No certs found
-	echo "[info] No certificates were found, creating them from provided or default values" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "$(date) [info] No certificates were found, creating them from provided or default values"
 	
 	# Check environment variables
 	if [ -z "$CA_CN" ]; then
