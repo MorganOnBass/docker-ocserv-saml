@@ -5,17 +5,6 @@ if [[ ! -e /config/ocserv.conf]]; then
 	cp /etc/ocserv/ocserv.conf.sample /config/ocserv.conf
 fi
 
-# Setup config
-set -x \
-	&& sed -i 's/\.\/sample\.passwd/\/config\/ocpasswd/' /config/ocserv.conf \
-	&& sed -i 's/\(max-same-clients = \)2/\110/' /config/ocserv.conf \
-	&& sed -i 's/\.\.\/tests/\/etc\/ocserv/' /config/ocserv.conf \
-	&& sed -i 's/#\(compression.*\)/\1/' /config/ocserv.conf \
-	&& sed -i '/^ipv4-network = /{s/192.168.1.0/192.168.99.0/}' /config/ocserv.conf \
-	&& sed -i 's/192.168.1.2/8.8.8.8/' /config/ocserv.conf \
-	&& sed -i 's/^route/#route/' /config/ocserv.conf \
-	&& sed -i 's/^no-route/#no-route/' /config/ocserv.conf \
-
 ##### Verify Variables #####
 export LISTEN_PORT=$(echo "${LISTEN_PORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
