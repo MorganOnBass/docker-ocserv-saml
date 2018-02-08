@@ -51,7 +51,7 @@ RUN buildDeps=" \
 RUN apk add --update bash
 
 ADD ocserv/ /etc/ocserv
-ADD ocserv/ocserv.conf /etc/ocserv/ocserv.conf.sample
+ADD ocserv/ocserv.conf /etc/ocserv.conf
 
 WORKDIR /etc/ocserv
 
