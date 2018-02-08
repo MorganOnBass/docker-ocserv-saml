@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [[ ! -e /etc/ocserv/ocserv.conf ]]; then
+ 	cp /etc/ocserv/ /etc/ocserv/ocserv.conf
+fi
+
 ##### Verify Variables #####
 export LISTEN_PORT=$(echo "${LISTEN_PORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
