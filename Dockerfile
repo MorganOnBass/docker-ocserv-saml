@@ -7,8 +7,6 @@ VOLUME /config
 
 ENV OC_VERSION=0.11.10
 
-ADD ocserv/ /etc/ocserv
-
 # Install dependencies
 RUN buildDeps=" \
 		curl \
@@ -52,6 +50,8 @@ RUN buildDeps=" \
 	&& apk del .build-deps \
 	&& rm -rf /var/cache/apk/*
 	
+ADD ocserv/ /etc/ocserv
+
 RUN apk add --update bash
 
 WORKDIR /config/ocserv
