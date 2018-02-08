@@ -38,7 +38,6 @@ RUN buildDeps=" \
 	&& ./configure \
 	&& make \
 	&& make install \
-	&& mkdir -p /config \
 	&& cp /usr/src/ocserv/doc/sample.config /config/ocserv.conf \
 	&& cd / \
 	&& rm -fr /usr/src/ocserv \
