@@ -50,8 +50,6 @@ RUN buildDeps=" \
 	&& apk del .build-deps \
 	&& rm -rf /var/cache/apk/*
 
-RUN pacman -S --needed base-devel
-
 WORKDIR /config/ocserv
 
 COPY docker-entrypoint.sh /entrypoint.sh
