@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Copy sample config if one doesnt exist
-if [[ ! -e /config/ocserv.conf]]; then
+if [[ ! -e /config/ocserv.conf ]]; then
 	cp /etc/ocserv/ocserv.conf.sample /config/ocserv.conf
 fi
 
