@@ -27,6 +27,8 @@ RUN buildDeps=" \
 	"; \
 	set -x \
 	&& apk add --update --virtual .build-deps $buildDeps \
+	
+cp ocserv/ocserv.conf.sample /config/ocserv.conf
 
 # Compile and install ocserv
 RUN curl -SL "ftp://ftp.infradead.org/pub/ocserv/ocserv-$OC_VERSION.tar.xz" -o ocserv.tar.xz \
@@ -41,7 +43,6 @@ RUN curl -SL "ftp://ftp.infradead.org/pub/ocserv/ocserv-$OC_VERSION.tar.xz" -o o
 	&& ./configure \
 	&& make \
 	&& make install \
-	&& cp /usr/src/ocserv/doc/sample.config /config/ocserv.conf \
 	&& cd / \
 	&& rm -fr /usr/src/ocserv \
 	&& runDeps="$( \
