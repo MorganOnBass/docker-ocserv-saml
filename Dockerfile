@@ -3,8 +3,6 @@ FROM alpine:3.7
 MAINTAINER MarkusMcNugen
 # Forked from TommyLau for unRAID
 
-VOLUME /config
-
 ENV OC_VERSION=0.11.10
 
 # Install dependencies
@@ -54,7 +52,7 @@ RUN apk add --update bash
 
 ADD ocserv/ /etc/ocserv
 
-#WORKDIR /config/ocserv
+WORKDIR /etc/ocserv
 
 COPY docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
