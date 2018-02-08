@@ -93,6 +93,7 @@ fi
 if [[ $PROXY_SUPPORT == "yes" ]]; then
 	# Set listen-proxy-proto = yes
 	sed -i 's/^#listen-proxy-proto/listen-proxy-proto/' /config/ocserv.conf
+	sed -i 's/^#listen-clear-file/listen-clear-file/' /config/ocserv.conf
 fi
 
 # Add DNS_SERVERS to ocserv conf
