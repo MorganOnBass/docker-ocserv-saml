@@ -80,8 +80,8 @@ auth = "plain[passwd=/config/ocpasswd]"
 #listen-host-is-dyndns = true
 
 # TCP and UDP port number
-tcp-port = 443
-udp-port = 443
+tcp-port = 4443
+udp-port = 4443
 
 # Accept connections using a socket file. It accepts HTTP
 # connections (i.e., without SSL/TLS unlike its TCP counterpart),
