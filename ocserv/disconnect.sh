@@ -18,6 +18,6 @@
 # STATS_BYTES_OUT, STATS_DURATION that contain a 64-bit counter of the bytes
 # output from the tun device, and the duration of the session in seconds.
 
-echo "[info] ${USERNAME} disconnected:" | ts '%Y-%m-%d %H:%M:%.S'
-echo "[info] VPN IP: ${IP_REMOTE} Remote IP: ${IP_REAL} Device:${DEVICE}" | ts '%Y-%m-%d %H:%M:%.S'
-echo "[info] Bytes In: ${STATS_BYTES_IN} Bytes Out: ${STATS_BYTES_OUT} Duration:${STATS_DURATION}" | ts '%Y-%m-%d %H:%M:%.S'
+echo "$(date) [info] ${USERNAME} disconnected:"
+echo "$(date) [info] VPN IP: ${IP_REMOTE} Remote IP: ${IP_REAL} Device:${DEVICE}"
+echo "$(date) [info] Bytes In: ${STATS_BYTES_IN} Bytes Out: ${STATS_BYTES_OUT} Duration:${STATS_DURATION}"
