@@ -3,6 +3,7 @@
 # Copy default ocserv if one doesnt exist
 if [[ ! -e /etc/ocserv/ocserv.conf ]]; then
  	cp /etc/ocserv/ /etc/ocserv/ocserv.conf
+	chmod 775 /etc/ocserv/ocserv.conf
 fi
 
 ##### Verify Variables #####
