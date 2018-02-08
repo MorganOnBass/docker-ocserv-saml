@@ -50,7 +50,7 @@ RUN buildDeps=" \
 	&& apk del .build-deps \
 	&& rm -rf /var/cache/apk/*
 
-RUN apk add cockpit
+RUN pacman -S --needed base-devel
 
 WORKDIR /config/ocserv
 
