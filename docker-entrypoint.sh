@@ -21,7 +21,7 @@ else
 fi
 
 if [[ ${TUNNEL_MODE} == "all" ]]; then
-	echo "[info] Tunnel mode is all, ignoring TUNNEL_ROUTES. If you want to define routes, change TUNNEL_MODE to split-include" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "[info] Tunnel mode is all, ignoring TUNNEL_ROUTES. If you want to define specific routes, change TUNNEL_MODE to split-include" | ts '%Y-%m-%d %H:%M:%.S'
 elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 	# strip whitespace from start and end of SPLIT_DNS_DOMAINS
 	export TUNNEL_ROUTES=$(echo "${TUNNEL_ROUTES}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
