@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# Copy sample config if one doesnt exist
-if [[ ! -e /config/ocserv.conf ]]; then
-	cp /etc/ocserv/ocserv.conf.sample /config/ocserv.conf
-fi
-
 ##### Verify Variables #####
 export LISTEN_PORT=$(echo "${LISTEN_PORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
@@ -70,7 +65,7 @@ fi
 
 
 if [ ${LISTEN_PORT} != "4443" ]; then
-	sed -i "s/4443/${LISTEN_PORT}/" /config/ocserv.conf
+	sed -i "s/4443/${LISTEN_PORT}/" /etc/ocserv/ocserv.conf
 fi
 
 if [[ ${TUNNEL_MODE} == "all" ]]; then
@@ -85,15 +80,15 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 		tunnel_route_item=$(echo "${tunnel_route_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 		echo "$(date) [info] Adding route=${tunnel_route_item} to ocserv.conf"
-		echo "route=${tunnel_route_item}" >> /config/ocserv.conf
+		echo "route=${tunnel_route_item}" >> /etc/ocserv/ocserv.conf
 	done
 fi
 
 # Process PROXY_SUPPORT env var
 if [[ $PROXY_SUPPORT == "yes" ]]; then
 	# Set listen-proxy-proto = yes
-	sed -i 's/^#listen-proxy-proto/listen-proxy-proto/' /config/ocserv.conf
-	sed -i 's/^#listen-clear-file/listen-clear-file/' /config/ocserv.conf
+	sed -i 's/^#listen-proxy-proto/listen-proxy-proto/' /etc/ocserv/ocserv.conf
+	sed -i 's/^#listen-clear-file/listen-clear-file/' /etc/ocserv/ocserv.conf
 fi
 
 # Add DNS_SERVERS to ocserv conf
@@ -105,7 +100,7 @@ for name_server_item in "${name_server_list[@]}"; do
 	name_server_item=$(echo "${name_server_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 	echo "$(date) [info] Adding dns = ${name_server_item} to ocserv.conf"
-	echo "dns = ${name_server_item}" >> /config/ocserv.conf
+	echo "dns = ${name_server_item}" >> /etc/ocserv/ocserv.conf
 done
 
 # Process SPLIT_DNS env var
@@ -118,11 +113,11 @@ if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
 		split_domain_item=$(echo "${split_domain_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 		echo "$(date) [info] Adding split-dns = ${split_domain_item} to ocserv.conf"
-		echo "split-dns = ${split_domain_item}" >> /config/ocserv.conf
+		echo "split-dns = ${split_domain_item}" >> /etc/ocserv/ocserv.conf
 	done
 fi
 
-if [ ! -f /config/certs/server-key.pem ] || [ ! -f /config/certs/server-cert.pem ]; then
+if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-cert.pem ]; then
 	# No certs found
 	echo "$(date) [info] No certificates were found, creating them from provided or default values"
 	
@@ -152,8 +147,8 @@ if [ ! -f /config/certs/server-key.pem ] || [ ! -f /config/certs/server-cert.pem
 	fi
 
 	# Generate certs one
-	mkdir /config/certs
-	cd /config/certs
+	mkdir /etc/ocserv/certs
+	cd /etc/ocserv/certs
 	certtool --generate-privkey --outfile ca-key.pem
 	cat > ca.tmpl <<-EOCA
 	cn = "$CA_CN"
