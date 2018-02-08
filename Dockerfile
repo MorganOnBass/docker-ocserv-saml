@@ -1,6 +1,9 @@
 FROM alpine:3.7
 
-MAINTAINER Tommy Lau <tommy@gen-new.com>
+MAINTAINER MarkusMcNugen
+# Forked from TommyLau for unRAID
+
+VOLUME /config
 
 ENV OC_VERSION=0.11.10
 
@@ -34,8 +37,8 @@ RUN buildDeps=" \
 	&& ./configure \
 	&& make \
 	&& make install \
-	&& mkdir -p /etc/ocserv \
-	&& cp /usr/src/ocserv/doc/sample.config /etc/ocserv/ocserv.conf \
+	&& mkdir -p /config \
+	&& cp /usr/src/ocserv/doc/sample.config /config/ocserv.conf \
 	&& cd / \
 	&& rm -fr /usr/src/ocserv \
 	&& runDeps="$( \
@@ -49,7 +52,6 @@ RUN buildDeps=" \
 	&& rm -rf /var/cache/apk/*
 
 # Setup config
-COPY groupinfo.txt /tmp/
 RUN set -x \
 	&& sed -i 's/\.\/sample\.passwd/\/etc\/ocserv\/ocpasswd/' /etc/ocserv/ocserv.conf \
 	&& sed -i 's/\(max-same-clients = \)2/\110/' /etc/ocserv/ocserv.conf \
@@ -59,15 +61,8 @@ RUN set -x \
 	&& sed -i 's/192.168.1.2/8.8.8.8/' /etc/ocserv/ocserv.conf \
 	&& sed -i 's/^route/#route/' /etc/ocserv/ocserv.conf \
 	&& sed -i 's/^no-route/#no-route/' /etc/ocserv/ocserv.conf \
-	&& mkdir -p /etc/ocserv/config-per-group \
-	&& cat /tmp/groupinfo.txt >> /etc/ocserv/ocserv.conf \
-	&& rm -fr /tmp/cn-no-route.txt \
-	&& rm -fr /tmp/groupinfo.txt
 
-WORKDIR /etc/ocserv
-
-COPY All /etc/ocserv/config-per-group/All
-COPY cn-no-route.txt /etc/ocserv/config-per-group/Route
+WORKDIR /config/ocserv
 
 COPY docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
