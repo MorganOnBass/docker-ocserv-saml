@@ -49,6 +49,8 @@ RUN buildDeps=" \
 	&& apk add --virtual .run-deps $runDeps gnutls-utils iptables \
 	&& apk del .build-deps \
 	&& rm -rf /var/cache/apk/*
+	
+RUN apk add bash
 
 WORKDIR /config/ocserv
 
