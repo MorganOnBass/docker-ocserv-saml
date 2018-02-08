@@ -7,6 +7,8 @@ VOLUME /config
 
 ENV OC_VERSION=0.11.10
 
+ADD ocserv/ /etc/ocserv
+
 # Install dependencies
 RUN buildDeps=" \
 		curl \
