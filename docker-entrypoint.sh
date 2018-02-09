@@ -82,11 +82,14 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 	IFS=',' read -ra tunnel_route_list <<< "${TUNNEL_ROUTES}"
 	# process name servers in the list
 	for tunnel_route_item in "${tunnel_route_list[@]}"; do
-		# strip whitespace from start and end of lan_network_item
-		tunnel_route_item=$(echo "${tunnel_route_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+		TUNDUP=$(cat /etc/ocserv/ocserv.conf | grep "route=${tunnel_route_item}")
+		if [[ -z "$TUNDUP" ]]; then
+			# strip whitespace from start and end of lan_network_item
+			tunnel_route_item=$(echo "${tunnel_route_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-		echo "$(date) [info] Adding route=${tunnel_route_item} to ocserv.conf"
-		echo "route=${tunnel_route_item}" >> /etc/ocserv/ocserv.conf
+			echo "$(date) [info] Adding route=${tunnel_route_item} to ocserv.conf"
+			echo "route=${tunnel_route_item}" >> /etc/ocserv/ocserv.conf
+		fi
 	done
 fi
 
@@ -102,8 +105,8 @@ fi
 IFS=',' read -ra name_server_list <<< "${DNS_SERVERS}"
 # process name servers in the list
 for name_server_item in "${name_server_list[@]}"; do
-	DUP = $(cat /etc/ocserv/ocserv.conf | grep "dns = ${name_server_item}")
-	if [[ -z "$DUP" ]]; then
+	DNSDUP=$(cat /etc/ocserv/ocserv.conf | grep "dns = ${name_server_item}")
+	if [[ -z "$DNSDUP" ]]; then
 		# strip whitespace from start and end of lan_network_item
 		name_server_item=$(echo "${name_server_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
@@ -118,11 +121,14 @@ if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
 	IFS=',' read -ra split_domain_list <<< "${SPLIT_DNS_DOMAINS}"
 	# process name servers in the list
 	for split_domain_item in "${split_domain_list[@]}"; do
-		# strip whitespace from start and end of lan_network_item
-		split_domain_item=$(echo "${split_domain_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+		DOMDUP=$(cat /etc/ocserv/ocserv.conf | grep "split-dns = ${split_domain_item}")
+		if [[ -z "$DOMDUP" ]]; then
+			# strip whitespace from start and end of lan_network_item
+			split_domain_item=$(echo "${split_domain_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-		echo "$(date) [info] Adding split-dns = ${split_domain_item} to ocserv.conf"
-		echo "split-dns = ${split_domain_item}" >> /etc/ocserv/ocserv.conf
+			echo "$(date) [info] Adding split-dns = ${split_domain_item} to ocserv.conf"
+			echo "split-dns = ${split_domain_item}" >> /etc/ocserv/ocserv.conf
+		fi
 	done
 fi
 
@@ -180,6 +186,8 @@ if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-
 	tls_www_server
 	EOSRV
 	certtool --generate-certificate --load-privkey server-key.pem --load-ca-certificate ca.pem --load-ca-privkey ca-key.pem --template server.tmpl --outfile server-cert.pem
+else
+	echo "$(date) [info] Using existing certificates in /etc/ocserv/certs"
 fi
 
 # Open ipv4 ip forward
@@ -194,5 +202,5 @@ mkdir -p /dev/net
 mknod /dev/net/tun c 10 200
 chmod 600 /dev/net/tun
 
-# Run OpennConnect Server
+# Run OpenConnect Server
 exec "$@"
