@@ -102,11 +102,14 @@ fi
 IFS=',' read -ra name_server_list <<< "${DNS_SERVERS}"
 # process name servers in the list
 for name_server_item in "${name_server_list[@]}"; do
-	# strip whitespace from start and end of lan_network_item
-	name_server_item=$(echo "${name_server_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+	DUP = $(cat /etc/ocserv/ocserv.conf | grep "dns = ${name_server_item}")
+	if [[ -z "$DUP" ]]; then
+		# strip whitespace from start and end of lan_network_item
+		name_server_item=$(echo "${name_server_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-	echo "$(date) [info] Adding dns = ${name_server_item} to ocserv.conf"
-	echo "dns = ${name_server_item}" >> /etc/ocserv/ocserv.conf
+		echo "$(date) [info] Adding dns = ${name_server_item} to ocserv.conf"
+		echo "dns = ${name_server_item}" >> /etc/ocserv/ocserv.conf
+	fi
 done
 
 # Process SPLIT_DNS env var
