@@ -47,7 +47,7 @@ RUN buildDeps=" \
 	&& apk add --virtual .run-deps $runDeps gnutls-utils iptables \
 	&& apk del .build-deps \
 	&& rm -rf /var/cache/apk/* \
-	&& mkdir -p /etc/ocserv/config-per-group \
+	&& mkdir -p /etc/ocserv/config-per-group
 	
 RUN apk add --update bash
 
