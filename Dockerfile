@@ -46,12 +46,14 @@ RUN buildDeps=" \
 		)" \
 	&& apk add --virtual .run-deps $runDeps gnutls-utils iptables \
 	&& apk del .build-deps \
-	&& rm -rf /var/cache/apk/*
+	&& rm -rf /var/cache/apk/* \
+	&& mkdir -p /etc/ocserv/config-per-group \
 	
 RUN apk add --update bash
 
 ADD ocserv/ /etc/ocserv
 ADD ocserv/ocserv.conf /etc/ocserv.conf
+COPY ocserv/All /etc/ocserv/config-per-group/All
 
 WORKDIR /etc/ocserv
 
