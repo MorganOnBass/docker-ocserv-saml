@@ -92,10 +92,6 @@ if [[ ${TUNNEL_MODE} == "all" ]]; then
 		echo "$(date) Power user! Routes are not being over written. You must manually modify the conf file yourself!"
 	else
 		sed -i '/^route=/d' /config/ocserv.conf
-		echo "no-route=192.168.0.0/255.255.0.0" >> /config/ocserv.conf
-		echo "no-route=10.0.0.0/255.0.0.0" >> /config/ocserv.conf
-		echo "no-route=172.16.0.0/255.240.0.0" >> /config/ocserv.conf
-		echo "no-route=127.0.0.0/255.0.0.0" >> /config/ocserv.conf
 	fi
 elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 	echo "$(date) [info] Tunneling routes $TUNNEL_ROUTES through VPN"
@@ -103,10 +99,6 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 		echo "$(date) Power user! Routes are not being over written. You must manually modify the conf file yourself!"
 	else
 		sed -i '/^route=/d' /config/ocserv.conf
-		echo "no-route=192.168.0.0/255.255.0.0" >> /config/ocserv.conf
-		echo "no-route=10.0.0.0/255.0.0.0" >> /config/ocserv.conf
-		echo "no-route=172.16.0.0/255.240.0.0" >> /config/ocserv.conf
-		echo "no-route=127.0.0.0/255.0.0.0" >> /config/ocserv.conf
 		# split comma seperated string into list from TUNNEL_ROUTES env variable
 		IFS=',' read -ra tunnel_route_list <<< "${TUNNEL_ROUTES}"
 		# process name servers in the list
