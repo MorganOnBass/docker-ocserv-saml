@@ -49,19 +49,15 @@ RUN buildDeps=" \
 	&& apk add --virtual .run-deps $runDeps gnutls-utils iptables \
 	&& apk del .build-deps \
 	&& rm -rf /var/cache/apk/* \
-	&& mkdir -p /etc/ocserv/config-per-group
 
 RUN apk add --update bash rsync
 
-ADD ocserv /etc/ocserv
 ADD ocserv /etc/default/ocserv
-RUN chmod a+x /etc/ocserv/*.sh \
-	&& chmod -R 644 /etc/ocserv
 
-WORKDIR /etc/ocserv
+WORKDIR /config
 
 COPY docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 4443
-CMD ["ocserv", "-c", "/etc/ocserv/ocserv.conf", "-f"]
+CMD ["ocserv", "-c", "/config/ocserv.conf", "-f"]
