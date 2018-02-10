@@ -237,23 +237,13 @@ mkdir -p /dev/net
 mknod /dev/net/tun c 10 200
 chmod 600 /dev/net/tun
 
-# Copy config files before application start
+# Copy config files on first boot
 if [ -z "$(ls -A /config)" ]; then
- 	/bin/cp -R /etc/ocserv/* /config
+ 	/bin/cp -Rf /etc/ocserv/* /config
 	chmod -R 777 /config
 fi
 
-# Copy changed files in /config to /etc/ocserv first
-for file in $(diff -r /config /etc/ocserv | grep /config | awk '{print $4}'); do
-	/bin/cp -R /config/$file /etc/ocserv/$file
-	chmod -R 644 /etc/ocserv/$file
-done
-
-# Copy changed files in /etc/ocserv to /config to ensure directories are matching so end-user can modify config
-for file in $(diff -r /config /etc/ocserv | grep /etc/ocserv | awk '{print $4}'); do
-	/bin/cp -R /etc/ocserv/$file /config/$file
-	chmod -R 777 /config/$file
-done
+#TODO Create /etc/default/ocserv sample directory. Replace missing files with samples from this dir. Then sync the two config folders.
 
 # Run OpenConnect Server
 exec "$@"
