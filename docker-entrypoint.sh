@@ -82,8 +82,8 @@ fi
 if [ ${LISTEN_PORT} != "4443" ]; then
 	TCPLINE = $(grep -rne 'tcp-port =' ocserv.conf | grep -Eo '^[^:]+')
 	UDPLINE = $(grep -rne 'udp-port =' ocserv.conf | grep -Eo '^[^:]+')
-	#sed -i "$(TCPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /config/ocserv.conf
-	#sed -i "$(UDPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /config/ocserv.conf
+	sed -i "$(TCPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /config/ocserv.conf
+	sed -i "$(UDPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /config/ocserv.conf
 fi
 
 if [[ ${TUNNEL_MODE} == "all" ]]; then
@@ -91,7 +91,7 @@ if [[ ${TUNNEL_MODE} == "all" ]]; then
 	if [[ ${POWER_USER} == "yes" ]]; then
 		echo "$(date) Power user! Routes are not being over written. You must manually modify the conf file yourself!"
 	else
-		sed -i 's/^route=/d' /config/ocserv.conf
+		sed -i '/^route=/d' /config/ocserv.conf
 		echo "no-route=192.168.0.0/255.255.0.0" >> /config/ocserv.conf
 		echo "no-route=10.0.0.0/255.0.0.0" >> /config/ocserv.conf
 		echo "no-route=172.16.0.0/255.240.0.0" >> /config/ocserv.conf
