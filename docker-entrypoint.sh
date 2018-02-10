@@ -243,6 +243,7 @@ if [[ ! -e /config/ocserv.conf || ! -e /config/connect.sh || ! -e /config/discon
 	rsync -vz --ignore-existing "/etc/default/ocserv" "/config"
 fi
 
+#Certs directory wont exist on first boot, or was deleted
 if [[ ! -d /config/certs ]]; then
 	rsync -vrz --ignore-existing "/etc/ocserv" "/config" 
 fi
