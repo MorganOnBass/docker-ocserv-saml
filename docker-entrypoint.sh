@@ -237,13 +237,14 @@ mkdir -p /dev/net
 mknod /dev/net/tun c 10 200
 chmod 600 /dev/net/tun
 
-# Copy config files on first boot
-if [ -z "$(ls -A /config)" ]; then
- 	/bin/cp -Rf /etc/ocserv/* /config
-	chmod -R 777 /config
+# Copy default config files if removed
+if [[ ! -d "/etc/default/ocserv" ]]; then
+	mkdir -p /etc/defailt/ocserv
 fi
+rsync -vz --ignore-existing "/etc/default/ocserv" "/config"
 
-#TODO Create /etc/default/ocserv sample directory. Replace missing files with samples from this dir. Then sync the two config folders.
+rsync -vz --delete "/config" "/etc/ocserv"
+chmod -R 644 /etc/ocserv
 
 # Run OpenConnect Server
 exec "$@"
