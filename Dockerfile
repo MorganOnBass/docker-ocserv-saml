@@ -50,13 +50,14 @@ RUN buildDeps=" \
 	&& apk del .build-deps \
 	&& rm -rf /var/cache/apk/* \
 	&& mkdir -p /etc/ocserv/config-per-group
-	
+
 RUN apk add --update bash
 
 ADD ocserv/ocserv.conf /etc/ocserv/ocserv.conf
 ADD ocserv/connect.sh /etc/ocserv/connect.sh
 ADD ocserv/disconnect.sh /etc/ocserv/disconnect.sh
 ADD ocserv/ocserv.conf /etc/ocserv.conf
+RUN chown a+x /etc/ocserv/*.sh
 
 WORKDIR /etc/ocserv
 
