@@ -5,7 +5,7 @@ MAINTAINER MarkusMcNugen
 
 ENV OC_VERSION=0.11.10
 
-VOLUME /etc/ocserv
+VOLUME /config
 
 # Install dependencies
 RUN buildDeps=" \
