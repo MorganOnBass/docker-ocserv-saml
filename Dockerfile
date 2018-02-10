@@ -51,7 +51,7 @@ RUN buildDeps=" \
 	&& rm -rf /var/cache/apk/* \
 	&& mkdir -p /etc/ocserv/config-per-group
 
-RUN apk add --update bash
+RUN apk add --update bash rsync
 
 ADD ocserv/ocserv.conf /etc/ocserv/ocserv.conf
 ADD ocserv/connect.sh /etc/ocserv/connect.sh
