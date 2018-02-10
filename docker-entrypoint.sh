@@ -238,7 +238,7 @@ mknod /dev/net/tun c 10 200
 chmod 600 /dev/net/tun
 
 # Copy config files before application start
-if [[ ! -e /config ]]; then
+if [ -z "$(ls -A /config)" ]; then
  	/bin/cp /etc/ocserv/* /config
 	chmod -R 777 /config
 else
