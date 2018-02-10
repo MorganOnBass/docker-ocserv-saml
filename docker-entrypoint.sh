@@ -238,9 +238,6 @@ mknod /dev/net/tun c 10 200
 chmod 600 /dev/net/tun
 
 # Copy default config files if removed
-if [[ ! -d "/etc/default/ocserv" ]]; then
-	mkdir -p /etc/defailt/ocserv
-fi
 rsync -vz --ignore-existing "/etc/default/ocserv" "/config"
 
 rsync -vz --delete "/config" "/etc/ocserv"
