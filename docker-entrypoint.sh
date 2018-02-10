@@ -241,10 +241,19 @@ chmod 600 /dev/net/tun
 if [ -z "$(ls -A /config)" ]; then
  	/bin/cp /etc/ocserv/* /config
 	chmod -R 777 /config
-else
-	/bin/cp /config/* /etc/ocserv
-	chmod -R 644 /etc/ocserv
 fi
+
+# Copy changed files in /config to /etc/ocserv first
+for file in $(diff -r /config /etc/ocserv | grep /config | awk '{print $4}'); do
+	/bin/cp /config/$file /etc/ocserv/$file
+	chmod -R 644 /etc/ocserv/$file
+done
+
+# Copy changed files in /etc/ocserv to /config to ensure directories are matching so end-user can modify config
+for file in $(diff -r /config /etc/ocserv | grep /etc/ocserv | awk '{print $4}'); do
+	/bin/cp /etc/ocserv/$file /config/$file
+	chmod -R 777 /config/$file
+done
 
 # Run OpenConnect Server
 exec "$@"
