@@ -8,14 +8,14 @@ fi
 chmod a+x /config/*.sh
 
 ##### Verify Variables #####
-#export POWER_USER=$(echo "${POWER_USER}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-# Check PROXY_SUPPORT env var
-#if [[ ! -z "${POWER_USER}" ]]; then
-#	echo "$(date) [info] POWER_USER defined as '${POWER_USER}'"
-#else
-#	echo "$(date) [warn] POWER_USER not defined,(via -e POWER_USER), defaulting to 'no'"
-#	export POWER_USER="no"
-#fi
+export POWER_USER=$(echo "${POWER_USER}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+ Check POWER_USER env var
+if [[ ! -z "${POWER_USER}" ]]; then
+	echo "$(date) [info] POWER_USER defined as '${POWER_USER}'"
+else
+	echo "$(date) [warn] POWER_USER not defined,(via -e POWER_USER), defaulting to 'no'"
+	export POWER_USER="no"
+fi
 
 export LISTEN_PORT=$(echo "${LISTEN_PORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
@@ -123,18 +123,18 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 fi
 
 # Process PROXY_SUPPORT env var
-if [[ ${POWER_USER} == "yes" ]]; then
-	echo "$(date) Power user! Proxy support not being written to ocserv.conf, you must manually modify the conf file yourself!"
-else
-	if [[ $PROXY_SUPPORT == "yes" ]]; then
-		echo "$(date) Enabling proxy support"
-		sed -i 's/^#listen-proxy-proto/listen-proxy-proto/' /config/ocserv.conf
-		sed -i 's/^#listen-clear-file/listen-clear-file/' /config/ocserv.conf
-	else
-		sed -i 's/^listen-proxy-proto/#listen-proxy-proto/' /config/ocserv.conf
-		sed -i 's/^listen-clear-file/#listen-clear-file/' /config/ocserv.conf
-	fi
-fi
+#if [[ ${POWER_USER} == "yes" ]]; then
+#	echo "$(date) Power user! Proxy support not being written to ocserv.conf, you must manually modify the conf file yourself!"
+#else
+#	if [[ $PROXY_SUPPORT == "yes" ]]; then
+#		echo "$(date) Enabling proxy support"
+#		sed -i 's/^#listen-proxy-proto/listen-proxy-proto/' /config/ocserv.conf
+#		sed -i 's/^#listen-clear-file/listen-clear-file/' /config/ocserv.conf
+#	else
+#		sed -i 's/^listen-proxy-proto/#listen-proxy-proto/' /config/ocserv.conf
+#		sed -i 's/^listen-clear-file/#listen-clear-file/' /config/ocserv.conf
+#	fi
+#fi
 
 # Add DNS_SERVERS to ocserv conf
 if [[ ${POWER_USER} == "yes" ]]; then
