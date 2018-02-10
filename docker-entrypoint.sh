@@ -238,9 +238,13 @@ mknod /dev/net/tun c 10 200
 chmod 600 /dev/net/tun
 
 # Copy default config files if removed
-rsync -vz --ignore-existing "/etc/default/ocserv" "/config"
+if [[ ! -e /config/ocserv.conf || ! -e /config/connect.sh || ! -e /config/disconnect.sh ]]; then
+	echo "$(date) Required config files are missing. Replacing with default backups!"
+	rsync -vz --ignore-existing "/etc/default/ocserv" "/config"
+fi
 
-rsync -vz --delete "/config" "/etc/ocserv"
+echo "$(date) Syncing any configuration changes from /config to /etc/ocserv"
+rsync -vrz --delete "/config" "/etc/ocserv"
 chmod -R 644 /etc/ocserv
 
 # Run OpenConnect Server
