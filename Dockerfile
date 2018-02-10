@@ -48,7 +48,7 @@ RUN buildDeps=" \
 		)" \
 	&& apk add --virtual .run-deps $runDeps gnutls-utils iptables \
 	&& apk del .build-deps \
-	&& rm -rf /var/cache/apk/* \
+	&& rm -rf /var/cache/apk/*
 
 RUN apk add --update bash rsync
 
