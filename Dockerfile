@@ -55,7 +55,7 @@ RUN apk add --update bash
 
 ADD ocserv/ /etc/ocserv
 ADD ocserv/ocserv.conf /etc/ocserv.conf
-COPY ocserv/All /etc/ocserv/config-per-group/All
+ADD ocserv/All /etc/ocserv/config-per-group/All
 
 WORKDIR /etc/ocserv
 
