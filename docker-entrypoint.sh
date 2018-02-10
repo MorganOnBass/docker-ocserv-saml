@@ -80,23 +80,29 @@ fi
 
 ##### Process Variables #####
 if [ ${LISTEN_PORT} != "4443" ]; then
-	TCPLINE = $(grep -rne 'tcp-port =' ocserv.conf | grep -Eo '^[^:]+')
-	UDPLINE = $(grep -rne 'udp-port =' ocserv.conf | grep -Eo '^[^:]+')
-	sed -i "$(TCPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /config/ocserv.conf
-	sed -i "$(UDPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /config/ocserv.conf
+	echo "$(date) [info] Modifying the listening port"
+	if [[ ${POWER_USER} == "yes" ]]; then
+		echo "$(date) Power user! Listening ports are not being written to ocserv.conf, you must manually modify the conf file yourself!"
+	else
+		#Find TCP/UDP line numbers and use sed to replace the lines
+		TCPLINE = $(grep -rne 'tcp-port =' ocserv.conf | grep -Eo '^[^:]+')
+		UDPLINE = $(grep -rne 'udp-port =' ocserv.conf | grep -Eo '^[^:]+')
+		sed -i "$(TCPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /config/ocserv.conf
+		sed -i "$(UDPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /config/ocserv.conf
+	fi
 fi
 
 if [[ ${TUNNEL_MODE} == "all" ]]; then
 	echo "$(date) [info] Tunneling all traffic through VPN"
 	if [[ ${POWER_USER} == "yes" ]]; then
-		echo "$(date) Power user! Routes are not being over written. You must manually modify the conf file yourself!"
+		echo "$(date) Power user! Routes are not being written to ocserv.conf, you must manually modify the conf file yourself!"
 	else
 		sed -i '/^route=/d' /config/ocserv.conf
 	fi
 elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 	echo "$(date) [info] Tunneling routes $TUNNEL_ROUTES through VPN"
 	if [[ ${POWER_USER} == "yes" ]]; then
-		echo "$(date) Power user! Routes are not being over written. You must manually modify the conf file yourself!"
+		echo "$(date) Power user! Routes are not being written to ocserv.conf, you must manually modify the conf file yourself!"
 	else
 		sed -i '/^route=/d' /config/ocserv.conf
 		# split comma seperated string into list from TUNNEL_ROUTES env variable
@@ -115,17 +121,22 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 fi
 
 # Process PROXY_SUPPORT env var
-if [[ $PROXY_SUPPORT == "yes" ]]; then
-	sed -i 's/^#listen-proxy-proto/listen-proxy-proto/' /config/ocserv.conf
-	sed -i 's/^#listen-clear-file/listen-clear-file/' /config/ocserv.conf
+if [[ ${POWER_USER} == "yes" ]]; then
+	echo "$(date) Power user! Proxy support not being written to ocserv.conf, you must manually modify the conf file yourself!"
 else
-	sed -i 's/^listen-proxy-proto/#listen-proxy-proto/' /config/ocserv.conf
-	sed -i 's/^listen-clear-file/#listen-clear-file/' /config/ocserv.conf
+	if [[ $PROXY_SUPPORT == "yes" ]]; then
+		echo "$(date) Enabling proxy support"
+		sed -i 's/^#listen-proxy-proto/listen-proxy-proto/' /config/ocserv.conf
+		sed -i 's/^#listen-clear-file/listen-clear-file/' /config/ocserv.conf
+	else
+		sed -i 's/^listen-proxy-proto/#listen-proxy-proto/' /config/ocserv.conf
+		sed -i 's/^listen-clear-file/#listen-clear-file/' /config/ocserv.conf
+	fi
 fi
 
 # Add DNS_SERVERS to ocserv conf
 if [[ ${POWER_USER} == "yes" ]]; then
-	echo "$(date) Power user! DNS servers are not being over written. You must manually modify the conf file yourself!"
+	echo "$(date) Power user! DNS servers are not being written to ocserv.conf, you must manually modify the conf file yourself!"
 else
 	sed -i '/^dns =/d' /config/ocserv.conf
 	# split comma seperated string into list from NAME_SERVERS env variable
@@ -146,7 +157,7 @@ fi
 # Process SPLIT_DNS env var
 if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
 	if [[ ${POWER_USER} == "yes" ]]; then
-		echo "$(date) Power user! Split-DNS domains are not being over written. You must manually modify the conf file yourself!"
+		echo "$(date) Power user! Split-DNS domains are not being written to ocserv.conf, you must manually modify the conf file yourself!"
 	else
 		sed -i '/^split-dns =/d' /config/ocserv.conf
 		# split comma seperated string into list from SPLIT_DNS_DOMAINS env variable
