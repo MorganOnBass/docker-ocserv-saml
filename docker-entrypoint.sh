@@ -8,14 +8,14 @@ fi
 chmod a+x /config/*.sh
 
 ##### Verify Variables #####
-export POWER_USER=$(echo "${POWER_USER}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+#export POWER_USER=$(echo "${POWER_USER}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
-if [[ ! -z "${POWER_USER}" ]]; then
-	echo "$(date) [info] POWER_USER defined as '${POWER_USER}'"
-else
-	echo "$(date) [warn] POWER_USER not defined,(via -e POWER_USER), defaulting to 'no'"
-	export POWER_USER="no"
-fi
+#if [[ ! -z "${POWER_USER}" ]]; then
+#	echo "$(date) [info] POWER_USER defined as '${POWER_USER}'"
+#else
+#	echo "$(date) [warn] POWER_USER not defined,(via -e POWER_USER), defaulting to 'no'"
+#	export POWER_USER="no"
+#fi
 
 export LISTEN_PORT=$(echo "${LISTEN_PORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
@@ -49,14 +49,14 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 	fi
 fi
 
-export PROXY_SUPPORT=$(echo "${PROXY_SUPPORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+#export PROXY_SUPPORT=$(echo "${PROXY_SUPPORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
-if [[ ! -z "${PROXY_SUPPORT}" ]]; then
-	echo "$(date) [info] PROXY_SUPPORT defined as '${PROXY_SUPPORT}'"
-else
-	echo "$(date) [warn] PROXY_SUPPORT not defined,(via -e PROXY_SUPPORT), defaulting to 'no'"
-	export PROXY_SUPPORT="no"
-fi
+#if [[ ! -z "${PROXY_SUPPORT}" ]]; then
+#	echo "$(date) [info] PROXY_SUPPORT defined as '${PROXY_SUPPORT}'"
+#else
+#	echo "$(date) [warn] PROXY_SUPPORT not defined,(via -e PROXY_SUPPORT), defaulting to 'no'"
+#	export PROXY_SUPPORT="no"
+#fi
 
 export DNS_SERVERS=$(echo "${DNS_SERVERS}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check DNS_SERVERS env var
