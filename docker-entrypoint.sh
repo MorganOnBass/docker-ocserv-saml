@@ -243,6 +243,10 @@ if [[ ! -e /config/ocserv.conf || ! -e /config/connect.sh || ! -e /config/discon
 	rsync -vz --ignore-existing "/etc/default/ocserv" "/config"
 fi
 
+if [[ ! -d /config/certs ]]; then
+	rsync -vrz --ignore-existing "/etc/ocserv" "/config" 
+fi
+
 echo "$(date) [info] Syncing any configuration changes from /config to /etc/ocserv"
 rsync -vrz --delete "/config" "/etc/ocserv"
 chmod -R 644 /etc/ocserv
