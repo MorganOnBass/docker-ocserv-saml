@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Copy default config files if removed
+if [[ ! -e /config/ocserv.conf || ! -e /config/connect.sh || ! -e /config/disconnect.sh ]]; then
+	echo "$(date) [err] Required config files are missing. Replacing with default backups!"
+	rsync -vz --ignore-existing "/etc/default/ocserv" "/config"
+fi
+chmod a+x /config/*.sh
+
 ##### Verify Variables #####
 export POWER_USER=$(echo "${POWER_USER}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
@@ -75,8 +82,8 @@ fi
 if [ ${LISTEN_PORT} != "4443" ]; then
 	TCPLINE = $(grep -rne 'tcp-port =' ocserv.conf | grep -Eo '^[^:]+')
 	UDPLINE = $(grep -rne 'udp-port =' ocserv.conf | grep -Eo '^[^:]+')
-	sed -i "$(TCPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /etc/ocserv/ocserv.conf
-	sed -i "$(UDPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /etc/ocserv/ocserv.conf
+	sed -i "$(TCPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /config/ocserv.conf
+	sed -i "$(UDPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /config/ocserv.conf
 fi
 
 if [[ ${TUNNEL_MODE} == "all" ]]; then
@@ -84,32 +91,32 @@ if [[ ${TUNNEL_MODE} == "all" ]]; then
 	if [[ ${POWER_USER} == "yes" ]]; then
 		echo "$(date) Power user! Routes are not being over written. You must manually modify the conf file yourself!"
 	else
-		sed -i 's/^route=/d' /etc/ocserv/ocserv.conf
-		echo "no-route=192.168.0.0/255.255.0.0" >> /etc/ocserv/ocserv.conf
-		echo "no-route=10.0.0.0/255.0.0.0" >> /etc/ocserv/ocserv.conf
-		echo "no-route=172.16.0.0/255.240.0.0" >> /etc/ocserv/ocserv.conf
-		echo "no-route=127.0.0.0/255.0.0.0" >> /etc/ocserv/ocserv.conf
+		sed -i 's/^route=/d' /config/ocserv.conf
+		echo "no-route=192.168.0.0/255.255.0.0" >> /config/ocserv.conf
+		echo "no-route=10.0.0.0/255.0.0.0" >> /config/ocserv.conf
+		echo "no-route=172.16.0.0/255.240.0.0" >> /config/ocserv.conf
+		echo "no-route=127.0.0.0/255.0.0.0" >> /config/ocserv.conf
 	fi
 elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 	echo "$(date) [info] Tunneling routes $TUNNEL_ROUTES through VPN"
 	if [[ ${POWER_USER} == "yes" ]]; then
 		echo "$(date) Power user! Routes are not being over written. You must manually modify the conf file yourself!"
 	else
-		sed -i '/^route=/d' /etc/ocserv/ocserv.conf
-		echo "no-route=192.168.0.0/255.255.0.0" >> /etc/ocserv/ocserv.conf
-		echo "no-route=10.0.0.0/255.0.0.0" >> /etc/ocserv/ocserv.conf
-		echo "no-route=172.16.0.0/255.240.0.0" >> /etc/ocserv/ocserv.conf
-		echo "no-route=127.0.0.0/255.0.0.0" >> /etc/ocserv/ocserv.conf
+		sed -i '/^route=/d' /config/ocserv.conf
+		echo "no-route=192.168.0.0/255.255.0.0" >> /config/ocserv.conf
+		echo "no-route=10.0.0.0/255.0.0.0" >> /config/ocserv.conf
+		echo "no-route=172.16.0.0/255.240.0.0" >> /config/ocserv.conf
+		echo "no-route=127.0.0.0/255.0.0.0" >> /config/ocserv.conf
 		# split comma seperated string into list from TUNNEL_ROUTES env variable
 		IFS=',' read -ra tunnel_route_list <<< "${TUNNEL_ROUTES}"
 		# process name servers in the list
 		for tunnel_route_item in "${tunnel_route_list[@]}"; do
-			TUNDUP=$(cat /etc/ocserv/ocserv.conf | grep "route=${tunnel_route_item}")
+			TUNDUP=$(cat /config/ocserv.conf | grep "route=${tunnel_route_item}")
 			if [[ -z "$TUNDUP" ]]; then
 				tunnel_route_item=$(echo "${tunnel_route_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 				echo "$(date) [info] Adding route=${tunnel_route_item} to ocserv.conf"
-				echo "route=${tunnel_route_item}" >> /etc/ocserv/ocserv.conf
+				echo "route=${tunnel_route_item}" >> /config/ocserv.conf
 			fi
 		done
 	fi
@@ -117,29 +124,29 @@ fi
 
 # Process PROXY_SUPPORT env var
 if [[ $PROXY_SUPPORT == "yes" ]]; then
-	sed -i 's/^#listen-proxy-proto/listen-proxy-proto/' /etc/ocserv/ocserv.conf
-	sed -i 's/^#listen-clear-file/listen-clear-file/' /etc/ocserv/ocserv.conf
+	sed -i 's/^#listen-proxy-proto/listen-proxy-proto/' /config/ocserv.conf
+	sed -i 's/^#listen-clear-file/listen-clear-file/' /config/ocserv.conf
 else
-	sed -i 's/^listen-proxy-proto/#listen-proxy-proto/' /etc/ocserv/ocserv.conf
-	sed -i 's/^listen-clear-file/#listen-clear-file/' /etc/ocserv/ocserv.conf
+	sed -i 's/^listen-proxy-proto/#listen-proxy-proto/' /config/ocserv.conf
+	sed -i 's/^listen-clear-file/#listen-clear-file/' /config/ocserv.conf
 fi
 
 # Add DNS_SERVERS to ocserv conf
 if [[ ${POWER_USER} == "yes" ]]; then
 	echo "$(date) Power user! DNS servers are not being over written. You must manually modify the conf file yourself!"
 else
-	sed -i '/^dns =/d' /etc/ocserv/ocserv.conf
+	sed -i '/^dns =/d' /config/ocserv.conf
 	# split comma seperated string into list from NAME_SERVERS env variable
 	IFS=',' read -ra name_server_list <<< "${DNS_SERVERS}"
 	# process name servers in the list
 	for name_server_item in "${name_server_list[@]}"; do
-		DNSDUP=$(cat /etc/ocserv/ocserv.conf | grep "dns = ${name_server_item}")
+		DNSDUP=$(cat /config/ocserv.conf | grep "dns = ${name_server_item}")
 		if [[ -z "$DNSDUP" ]]; then
 			# strip whitespace from start and end of lan_network_item
 			name_server_item=$(echo "${name_server_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 			echo "$(date) [info] Adding dns = ${name_server_item} to ocserv.conf"
-			echo "dns = ${name_server_item}" >> /etc/ocserv/ocserv.conf
+			echo "dns = ${name_server_item}" >> /config/ocserv.conf
 		fi
 	done
 fi
@@ -149,25 +156,25 @@ if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
 	if [[ ${POWER_USER} == "yes" ]]; then
 		echo "$(date) Power user! Split-DNS domains are not being over written. You must manually modify the conf file yourself!"
 	else
-		sed -i '/^split-dns =/d' /etc/ocserv/ocserv.conf
+		sed -i '/^split-dns =/d' /config/ocserv.conf
 		# split comma seperated string into list from SPLIT_DNS_DOMAINS env variable
 		IFS=',' read -ra split_domain_list <<< "${SPLIT_DNS_DOMAINS}"
 		# process name servers in the list
 		for split_domain_item in "${split_domain_list[@]}"; do
-			DOMDUP=$(cat /etc/ocserv/ocserv.conf | grep "split-dns = ${split_domain_item}")
+			DOMDUP=$(cat /config/ocserv.conf | grep "split-dns = ${split_domain_item}")
 			if [[ -z "$DOMDUP" ]]; then
 				# strip whitespace from start and end of lan_network_item
 				split_domain_item=$(echo "${split_domain_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 				echo "$(date) [info] Adding split-dns = ${split_domain_item} to ocserv.conf"
-				echo "split-dns = ${split_domain_item}" >> /etc/ocserv/ocserv.conf
+				echo "split-dns = ${split_domain_item}" >> /config/ocserv.conf
 			fi
 		done
 	fi
 fi
 
 ##### Generate certs if none exist #####
-if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-cert.pem ]; then
+if [ ! -f /config/certs/server-key.pem ] || [ ! -f /config/certs/server-cert.pem ]; then
 	# No certs found
 	echo "$(date) [info] No certificates were found, creating them from provided or default values"
 	
@@ -197,8 +204,8 @@ if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-
 	fi
 
 	# Generate certs one
-	mkdir /etc/ocserv/certs
-	cd /etc/ocserv/certs
+	mkdir /config/certs
+	cd /config/certs
 	certtool --generate-privkey --outfile ca-key.pem
 	cat > ca.tmpl <<-EOCA
 	cn = "$CA_CN"
@@ -222,7 +229,7 @@ if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-
 	EOSRV
 	certtool --generate-certificate --load-privkey server-key.pem --load-ca-certificate ca.pem --load-ca-privkey ca-key.pem --template server.tmpl --outfile server-cert.pem
 else
-	echo "$(date) [info] Using existing certificates in /etc/ocserv/certs"
+	echo "$(date) [info] Using existing certificates in /config/certs"
 fi
 
 # Open ipv4 ip forward
@@ -237,20 +244,8 @@ mkdir -p /dev/net
 mknod /dev/net/tun c 10 200
 chmod 600 /dev/net/tun
 
-# Copy default config files if removed
-if [[ ! -e /config/ocserv.conf || ! -e /config/connect.sh || ! -e /config/disconnect.sh ]]; then
-	echo "$(date) [err] Required config files are missing. Replacing with default backups!"
-	rsync -vz --ignore-existing "/etc/default/ocserv" "/config"
-fi
-
-#Certs directory wont exist on first boot, or was deleted
-if [[ ! -d /config/certs ]]; then
-	rsync -vrz --ignore-existing "/etc/ocserv" "/config" 
-fi
-
-echo "$(date) [info] Syncing any configuration changes from /config to /etc/ocserv"
-rsync -vrz --delete "/config" "/etc/ocserv"
-chmod -R 644 /etc/ocserv
+echo "$(date) [info] Syncing any configuration changes from /config to /config"
+chmod -R 755 /config
 
 # Run OpenConnect Server
 exec "$@"
