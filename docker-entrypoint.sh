@@ -112,9 +112,11 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 			TUNDUP=$(cat /config/ocserv.conf | grep "route=${tunnel_route_item}")
 			if [[ -z "$TUNDUP" ]]; then
 				tunnel_route_item=$(echo "${tunnel_route_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+				IP=$(ipcalc -b 192.168.1.2/255.255.255.0 | awk '/Address/ {print $2}')
+				NETMASK=$(ipcalc -b 192.168.1.2/255.255.255.0 | awk '/Netmask/ {print $2}')
 
-				echo "$(date) [info] Adding route=${tunnel_route_item} to ocserv.conf"
-				echo "route=${tunnel_route_item}" >> /config/ocserv.conf
+				echo "$(date) [info] Adding route=$IP/$NETMASK to ocserv.conf"
+				echo "route=$IP/$NETMASK" >> /config/ocserv.conf
 			fi
 		done
 	fi
