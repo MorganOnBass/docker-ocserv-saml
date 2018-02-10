@@ -3,7 +3,7 @@
 # Copy default config files if removed
 if [[ ! -e /config/ocserv.conf || ! -e /config/connect.sh || ! -e /config/disconnect.sh ]]; then
 	echo "$(date) [err] Required config files are missing. Replacing with default backups!"
-	rsync -vzr --ignore-existing "/etc/default/ocserv/*" "/config"
+	rsync -vzr --ignore-existing "/etc/default/ocserv/" "/config"
 fi
 chmod a+x /config/*.sh
 
