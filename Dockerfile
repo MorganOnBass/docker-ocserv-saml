@@ -53,12 +53,10 @@ RUN buildDeps=" \
 
 RUN apk add --update bash rsync
 
-ADD ocserv/ocserv.conf /etc/ocserv/ocserv.conf
-ADD ocserv/connect.sh /etc/ocserv/connect.sh
-ADD ocserv/disconnect.sh /etc/ocserv/disconnect.sh
-ADD ocserv/ocserv.conf /etc/ocserv/ocserv.conf.bak
-RUN chmod a+x /etc/ocserv/*.sh
-RUN chmod -R 775 /etc/ocserv/
+ADD ocserv /etc/ocserv
+ADD ocserv /etc/default/ocserv
+RUN chmod a+x /etc/ocserv/*.sh \
+	&& chmod -R 775 /etc/ocserv
 
 WORKDIR /etc/ocserv
 
