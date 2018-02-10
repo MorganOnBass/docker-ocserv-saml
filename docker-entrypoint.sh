@@ -1,36 +1,15 @@
 #!/bin/bash
 
-# Copy default ocserv if one doesnt exist
-if [[ ! -e /config/ocserv.conf ]]; then
- 	/bin/cp /etc/ocserv.conf /config/ocserv.conf
-	chmod 777 /config/ocserv.conf
-else
-	/bin/cp /config/ocserv.conf /etc/ocserv/ocserv.conf 
-fi
-
-if [[ ! -e /config/connect.sh ]]; then
- 	/bin/cp /etc/ocserv/connect.sh /config/connect.sh
-	chmod 777 /config/connect.sh
-else
-	/bin/cp /config/connect.sh /etc/ocserv/connect.sh
-fi
-
-if [[ ! -e /config/disconnect.sh ]]; then
- 	/bin/cp /etc/ocserv/disconnect.sh /config/disconnect.sh
-	chmod 777 /config/disconnect.sh
-else
-	/bin/cp /config/disconnect.sh /etc/ocserv/disconnect.sh
-fi
-
-if [[ ! -e /config/certs/* ]]; then
-	mkdir -p /config/certs
- 	/bin/cp /etc/ocserv/certs/* /config/certs/
-	chmod -R 777 /config/certs/*
-else
-	/bin/cp /config/certs/* /etc/ocserv/certs/
-fi
-
 ##### Verify Variables #####
+export POWER_USER=$(echo "${POWER_USER}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+# Check PROXY_SUPPORT env var
+if [[ ! -z "${POWER_USER}" ]]; then
+	echo "$(date) [info] POWER_USER defined as '${POWER_USER}'"
+else
+	echo "$(date) [warn] POWER_USER not defined,(via -e POWER_USER), defaulting to 'no'"
+	export POWER_USER="no"
+fi
+
 export LISTEN_PORT=$(echo "${LISTEN_PORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
 if [[ ! -z "${LISTEN_PORT}" ]]; then
@@ -63,7 +42,6 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 	fi
 fi
 
-# strip whitespace from start and end of PROXY_SUPPORT
 export PROXY_SUPPORT=$(echo "${PROXY_SUPPORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
 if [[ ! -z "${PROXY_SUPPORT}" ]]; then
@@ -73,7 +51,6 @@ else
 	export PROXY_SUPPORT="no"
 fi
 
-# strip whitespace from start and end of DNS_SERVERS
 export DNS_SERVERS=$(echo "${DNS_SERVERS}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check DNS_SERVERS env var
 if [[ ! -z "${DNS_SERVERS}" ]]; then
@@ -94,68 +71,102 @@ if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
 fi
 
 
+##### Process Variables #####
 if [ ${LISTEN_PORT} != "4443" ]; then
-	sed -i "s/4443/${LISTEN_PORT}/" /etc/ocserv/ocserv.conf
+	TCPLINE = $(grep -rne 'tcp-port =' ocserv.conf | grep -Eo '^[^:]+')
+	UDPLINE = $(grep -rne 'udp-port =' ocserv.conf | grep -Eo '^[^:]+')
+	sed -i "$(TCPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /etc/ocserv/ocserv.conf
+	sed -i "$(UDPLINE)s/.*/tcp-port = ${LISTEN_PORT}/" /etc/ocserv/ocserv.conf
 fi
 
 if [[ ${TUNNEL_MODE} == "all" ]]; then
 	echo "$(date) [info] Tunneling all traffic through VPN"
+	if [[ ${POWER_USER} == "yes" ]]; then
+		echo "$(date) Power user! Routes are not being over written. You must manually modify the conf file yourself!"
+	else
+		sed -i 's/^route=/d' /etc/ocserv/ocserv.conf
+		echo "no-route=192.168.0.0/255.255.0.0" >> /etc/ocserv/ocserv.conf
+		echo "no-route=10.0.0.0/255.0.0.0" >> /etc/ocserv/ocserv.conf
+		echo "no-route=172.16.0.0/255.240.0.0" >> /etc/ocserv/ocserv.conf
+		echo "no-route=127.0.0.0/255.0.0.0" >> /etc/ocserv/ocserv.conf
+	fi
 elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 	echo "$(date) [info] Tunneling routes $TUNNEL_ROUTES through VPN"
-	# split comma seperated string into list from NAME_SERVERS env variable
-	IFS=',' read -ra tunnel_route_list <<< "${TUNNEL_ROUTES}"
-	# process name servers in the list
-	for tunnel_route_item in "${tunnel_route_list[@]}"; do
-		TUNDUP=$(cat /etc/ocserv/ocserv.conf | grep "route=${tunnel_route_item}")
-		if [[ -z "$TUNDUP" ]]; then
-			# strip whitespace from start and end of lan_network_item
-			tunnel_route_item=$(echo "${tunnel_route_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+	if [[ ${POWER_USER} == "yes" ]]; then
+		echo "$(date) Power user! Routes are not being over written. You must manually modify the conf file yourself!"
+	else
+		sed -i '/^route=/d' /etc/ocserv/ocserv.conf
+		echo "no-route=192.168.0.0/255.255.0.0" >> /etc/ocserv/ocserv.conf
+		echo "no-route=10.0.0.0/255.0.0.0" >> /etc/ocserv/ocserv.conf
+		echo "no-route=172.16.0.0/255.240.0.0" >> /etc/ocserv/ocserv.conf
+		echo "no-route=127.0.0.0/255.0.0.0" >> /etc/ocserv/ocserv.conf
+		# split comma seperated string into list from TUNNEL_ROUTES env variable
+		IFS=',' read -ra tunnel_route_list <<< "${TUNNEL_ROUTES}"
+		# process name servers in the list
+		for tunnel_route_item in "${tunnel_route_list[@]}"; do
+			TUNDUP=$(cat /etc/ocserv/ocserv.conf | grep "route=${tunnel_route_item}")
+			if [[ -z "$TUNDUP" ]]; then
+				tunnel_route_item=$(echo "${tunnel_route_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-			echo "$(date) [info] Adding route=${tunnel_route_item} to ocserv.conf"
-			echo "route=${tunnel_route_item}" >> /etc/ocserv/ocserv.conf
-		fi
-	done
+				echo "$(date) [info] Adding route=${tunnel_route_item} to ocserv.conf"
+				echo "route=${tunnel_route_item}" >> /etc/ocserv/ocserv.conf
+			fi
+		done
+	fi
 fi
 
 # Process PROXY_SUPPORT env var
 if [[ $PROXY_SUPPORT == "yes" ]]; then
-	# Set listen-proxy-proto = yes
 	sed -i 's/^#listen-proxy-proto/listen-proxy-proto/' /etc/ocserv/ocserv.conf
 	sed -i 's/^#listen-clear-file/listen-clear-file/' /etc/ocserv/ocserv.conf
+else
+	sed -i 's/^listen-proxy-proto/#listen-proxy-proto/' /etc/ocserv/ocserv.conf
+	sed -i 's/^listen-clear-file/#listen-clear-file/' /etc/ocserv/ocserv.conf
 fi
 
 # Add DNS_SERVERS to ocserv conf
-# split comma seperated string into list from NAME_SERVERS env variable
-IFS=',' read -ra name_server_list <<< "${DNS_SERVERS}"
-# process name servers in the list
-for name_server_item in "${name_server_list[@]}"; do
-	DNSDUP=$(cat /etc/ocserv/ocserv.conf | grep "dns = ${name_server_item}")
-	if [[ -z "$DNSDUP" ]]; then
-		# strip whitespace from start and end of lan_network_item
-		name_server_item=$(echo "${name_server_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-
-		echo "$(date) [info] Adding dns = ${name_server_item} to ocserv.conf"
-		echo "dns = ${name_server_item}" >> /etc/ocserv/ocserv.conf
-	fi
-done
-
-# Process SPLIT_DNS env var
-if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
-	# split comma seperated string into list from SPLIT_DNS_DOMAINS env variable
-	IFS=',' read -ra split_domain_list <<< "${SPLIT_DNS_DOMAINS}"
+if [[ ${POWER_USER} == "yes" ]]; then
+	echo "$(date) Power user! DNS servers are not being over written. You must manually modify the conf file yourself!"
+else
+	sed -i '/^dns =/d' /etc/ocserv/ocserv.conf
+	# split comma seperated string into list from NAME_SERVERS env variable
+	IFS=',' read -ra name_server_list <<< "${DNS_SERVERS}"
 	# process name servers in the list
-	for split_domain_item in "${split_domain_list[@]}"; do
-		DOMDUP=$(cat /etc/ocserv/ocserv.conf | grep "split-dns = ${split_domain_item}")
-		if [[ -z "$DOMDUP" ]]; then
+	for name_server_item in "${name_server_list[@]}"; do
+		DNSDUP=$(cat /etc/ocserv/ocserv.conf | grep "dns = ${name_server_item}")
+		if [[ -z "$DNSDUP" ]]; then
 			# strip whitespace from start and end of lan_network_item
-			split_domain_item=$(echo "${split_domain_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+			name_server_item=$(echo "${name_server_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-			echo "$(date) [info] Adding split-dns = ${split_domain_item} to ocserv.conf"
-			echo "split-dns = ${split_domain_item}" >> /etc/ocserv/ocserv.conf
+			echo "$(date) [info] Adding dns = ${name_server_item} to ocserv.conf"
+			echo "dns = ${name_server_item}" >> /etc/ocserv/ocserv.conf
 		fi
 	done
 fi
 
+# Process SPLIT_DNS env var
+if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
+	if [[ ${POWER_USER} == "yes" ]]; then
+		echo "$(date) Power user! Split-DNS domains are not being over written. You must manually modify the conf file yourself!"
+	else
+		sed -i '/^split-dns =/d' /etc/ocserv/ocserv.conf
+		# split comma seperated string into list from SPLIT_DNS_DOMAINS env variable
+		IFS=',' read -ra split_domain_list <<< "${SPLIT_DNS_DOMAINS}"
+		# process name servers in the list
+		for split_domain_item in "${split_domain_list[@]}"; do
+			DOMDUP=$(cat /etc/ocserv/ocserv.conf | grep "split-dns = ${split_domain_item}")
+			if [[ -z "$DOMDUP" ]]; then
+				# strip whitespace from start and end of lan_network_item
+				split_domain_item=$(echo "${split_domain_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+
+				echo "$(date) [info] Adding split-dns = ${split_domain_item} to ocserv.conf"
+				echo "split-dns = ${split_domain_item}" >> /etc/ocserv/ocserv.conf
+			fi
+		done
+	fi
+fi
+
+##### Generate certs if none exist #####
 if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-cert.pem ]; then
 	# No certs found
 	echo "$(date) [info] No certificates were found, creating them from provided or default values"
@@ -225,6 +236,15 @@ iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
 mkdir -p /dev/net
 mknod /dev/net/tun c 10 200
 chmod 600 /dev/net/tun
+
+# Copy config files before application start
+if [[ ! -e /config ]]; then
+ 	/bin/cp /etc/ocserv/* /config
+	chmod -R 777 /config
+else
+	/bin/cp /config/* /etc/ocserv
+	chmod -R 644 /etc/ocserv
+fi
 
 # Run OpenConnect Server
 exec "$@"
