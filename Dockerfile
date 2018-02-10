@@ -56,7 +56,7 @@ RUN apk add --update bash rsync
 ADD ocserv /etc/ocserv
 ADD ocserv /etc/default/ocserv
 RUN chmod a+x /etc/ocserv/*.sh \
-	&& chmod -R 775 /etc/ocserv
+	&& chmod -R 644 /etc/ocserv
 
 WORKDIR /etc/ocserv
 
