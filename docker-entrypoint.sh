@@ -244,7 +244,6 @@ mkdir -p /dev/net
 mknod /dev/net/tun c 10 200
 chmod 600 /dev/net/tun
 
-echo "$(date) [info] Syncing any configuration changes from /config to /config"
 chmod -R 755 /config
 
 # Run OpenConnect Server
