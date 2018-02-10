@@ -1,9 +1,33 @@
 #!/bin/bash
 
 # Copy default ocserv if one doesnt exist
-if [[ ! -e /etc/ocserv/ocserv.conf ]]; then
- 	cp /etc/ocserv.conf /etc/ocserv/ocserv.conf
-	chmod 775 /etc/ocserv/ocserv.conf
+if [[ ! -e /config/ocserv.conf ]]; then
+ 	/bin/cp /etc/ocserv.conf /config/ocserv.conf
+	chmod 777 /config/ocserv.conf
+else
+	/bin/cp /config/ocserv.conf /etc/ocserv/ocserv.conf 
+fi
+
+if [[ ! -e /config/connect.sh ]]; then
+ 	/bin/cp /etc/ocserv/connect.sh /config/connect.sh
+	chmod 777 /config/connect.sh
+else
+	/bin/cp /config/connect.sh /etc/ocserv/connect.sh
+fi
+
+if [[ ! -e /config/disconnect.sh ]]; then
+ 	/bin/cp /etc/ocserv/disconnect.sh /config/disconnect.sh
+	chmod 777 /config/disconnect.sh
+else
+	/bin/cp /config/disconnect.sh /etc/ocserv/disconnect.sh
+fi
+
+if [[ ! -e /config/certs/* ]]; then
+	mkdir -p /config/certs
+ 	/bin/cp /etc/ocserv/certs/* /config/certs/
+	chmod -R 777 /config/certs/*
+else
+	/bin/cp /config/certs/* /etc/ocserv/certs/
 fi
 
 ##### Verify Variables #####
