@@ -18,5 +18,4 @@
 # STATS_BYTES_OUT, STATS_DURATION that contain a 64-bit counter of the bytes
 # output from the tun device, and the duration of the session in seconds.
 
-echo "[info] ${USERNAME} connected:"
-echo "[info] VPN IP: ${IP_REMOTE} Remote IP: ${IP_REAL} Device:${DEVICE}"
+echo "$(date) [info] User ${USERNAME} Connected - Server: ${IP_REAL_LOCAL} VPN IP: ${IP_REMOTE}  Remote IP: ${IP_REAL} Device:${DEVICE}"
