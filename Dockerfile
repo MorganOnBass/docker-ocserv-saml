@@ -58,6 +58,7 @@ ADD ocserv/connect.sh /etc/ocserv/connect.sh
 ADD ocserv/disconnect.sh /etc/ocserv/disconnect.sh
 ADD ocserv/ocserv.conf /etc/ocserv.conf
 RUN chown a+x /etc/ocserv/*.sh
+RUN chown -R 775 /etc/ocserv/
 
 WORKDIR /etc/ocserv
 
