@@ -50,7 +50,7 @@ server-cert.pem
 $ docker run --privileged  -d \
               -v /your/config/path/:/config \
               -e "LISTEN_PORT=443" \
-              -e "DNS_SERVERS=8.8.8.8,8.8.4.4" \
+              -e "DNS_SERVERS=192.168.1.190" \
               -e "TUNNEL_MODE=split-include" \
               -e "TUNNEL_ROUTES=192.168.1.0/24" \
               -e "SPLIT_DNS_DOMAINS=example.com" \
@@ -111,9 +111,8 @@ $ docker run --privileged  -d \
               -e "LISTEN_PORT=443" \
               -e "DNS_SERVERS=8.8.8.8,8.8.4.4" \
               -e "TUNNEL_MODE=split-include" \
-              -e "TUNNEL_ROUTES=192.168.1.0/24" \
-              -e "SPLIT_DNS_DOMAINS=example.com" \
-              -p 4443:4443 \
+              -e "TUNNEL_ROUTES=192.168.1.0/24" \
+              -p 4443:4443 \
               -p 4443:4443/udp \
               openconnect
 ```
