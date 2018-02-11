@@ -21,7 +21,7 @@ export LISTEN_PORT=$(echo "${LISTEN_PORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
 if [[ ! -z "${LISTEN_PORT}" ]]; then
 	echo "$(date) [info] LISTEN_PORT defined as '${LISTEN_PORT}'"
-	echo "Make sure you changed the 4443 port in container settings to expose the port you selected!"
+	echo "$(date) Make sure you changed the 4443 port in container settings to expose the port you selected!"
 else
 	echo "$(date) [warn] LISTEN_PORT not defined,(via -e LISTEN_PORT), defaulting to '4443'"
 	export LISTEN_PORT="4443"
@@ -82,7 +82,7 @@ fi
 if [ ${LISTEN_PORT} != "4443" ]; then
 	echo "$(date) [info] Modifying the listening port"
 	if [[ ${POWER_USER} == "yes" ]]; then
-		echo "$(date) Power user! Listening ports are not being written to ocserv.conf, you must manually modify the conf file yourself!"
+		echo "$(date) [warn] Power user! Listening ports are not being written to ocserv.conf, you must manually modify the conf file yourself!"
 	else
 		#Find TCP/UDP line numbers and use sed to replace the lines
 		TCPLINE = $(grep -rne 'tcp-port =' ocserv.conf | grep -Eo '^[^:]+')
@@ -95,14 +95,14 @@ fi
 if [[ ${TUNNEL_MODE} == "all" ]]; then
 	echo "$(date) [info] Tunneling all traffic through VPN"
 	if [[ ${POWER_USER} == "yes" ]]; then
-		echo "$(date) Power user! Routes are not being written to ocserv.conf, you must manually modify the conf file yourself!"
+		echo "$(date) [warn] Power user! Routes are not being written to ocserv.conf, you must manually modify the conf file yourself!"
 	else
 		sed -i '/^route=/d' /config/ocserv.conf
 	fi
 elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 	echo "$(date) [info] Tunneling routes $TUNNEL_ROUTES through VPN"
 	if [[ ${POWER_USER} == "yes" ]]; then
-		echo "$(date) Power user! Routes are not being written to ocserv.conf, you must manually modify the conf file yourself!"
+		echo "$(date) [warn] Power user! Routes are not being written to ocserv.conf, you must manually modify the conf file yourself!"
 	else
 		sed -i '/^route=/d' /config/ocserv.conf
 		# split comma seperated string into list from TUNNEL_ROUTES env variable
@@ -138,7 +138,7 @@ fi
 
 # Add DNS_SERVERS to ocserv conf
 if [[ ${POWER_USER} == "yes" ]]; then
-	echo "$(date) Power user! DNS servers are not being written to ocserv.conf, you must manually modify the conf file yourself!"
+	echo "$(date) [warn] Power user! DNS servers are not being written to ocserv.conf, you must manually modify the conf file yourself!"
 else
 	sed -i '/^dns =/d' /config/ocserv.conf
 	# split comma seperated string into list from NAME_SERVERS env variable
@@ -159,7 +159,7 @@ fi
 # Process SPLIT_DNS env var
 if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
 	if [[ ${POWER_USER} == "yes" ]]; then
-		echo "$(date) Power user! Split-DNS domains are not being written to ocserv.conf, you must manually modify the conf file yourself!"
+		echo "$(date) [warn] Power user! Split-DNS domains are not being written to ocserv.conf, you must manually modify the conf file yourself!"
 	else
 		sed -i '/^split-dns =/d' /config/ocserv.conf
 		# split comma seperated string into list from SPLIT_DNS_DOMAINS env variable
