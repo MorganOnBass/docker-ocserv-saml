@@ -7,6 +7,7 @@ OpenConnect server is an SSL VPN server. Its purpose is to be a secure, small, f
 
 # Docker Features
 * Base: Alpine 3.7
+* Latest OpenConnect Server 0.11.10
 * Size: 23.1MB
 * Modification of the listening port for more networking versatility
 * Customizing the DNS servers used for queries over the VPN
