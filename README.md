@@ -38,8 +38,8 @@ $ docker run --privileged  -d \
               -e "TUNNEL_MODE=split-include" \
               -e "TUNNEL_ROUTES=192.168.1.0/24" \
               -e "SPLIT_DNS_DOMAINS=example.com" \
-              -p 8999:8999 \
-              -p 8999:8999/udp \
+              -p 4443:4443 \
+              -p 4443:4443/udp \
               openconnect
 ```
 
@@ -91,8 +91,8 @@ $ docker run --privileged  -d \
               -e "TUNNEL_MODE=split-include" \
               -e "TUNNEL_ROUTES=192.168.1.0/24" \
               -e "SPLIT_DNS_DOMAINS=example.com" \
-              -p 8999:8999 \
-              -p 8999:8999/udp \
+              -p 4443:4443 \
+              -p 4443:4443/udp \
               openconnect
 ```
 
