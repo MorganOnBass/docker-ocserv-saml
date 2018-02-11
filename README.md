@@ -3,8 +3,8 @@
 # OpenConnect VPN Server
 OpenConnect server is an SSL VPN server. Its purpose is to be a secure, small, fast and configurable VPN server. It implements the OpenConnect SSL VPN protocol, and has also (currently experimental) compatibility with clients using the AnyConnect SSL VPN protocol. The OpenConnect protocol provides a dual TCP/UDP VPN channel, and uses the standard IETF security protocols to secure it.
 
-[Homepage](https://ocserv.gitlab.io/www/platforms.html)
-[Documentation](https://ocserv.gitlab.io/www/manual.html)
+[Homepage](https://ocserv.gitlab.io/www/platforms.html)<br>
+[Documentation](https://ocserv.gitlab.io/www/manual.html)<br>
 [Source](https://gitlab.com/ocserv/ocserv)
 
 # Docker Features
@@ -33,16 +33,14 @@ $ docker run --privileged  -d \
 ```
 $ docker run --privileged  -d \
               -v /your/config/path/:/config \
-              -v /your/downloads/path/:/downloads \
-              -e "VPN_ENABLED=yes" \
-              -e "LAN_NETWORK=192.168.1.0/24" \
-              -e "NAME_SERVERS=8.8.8.8,8.8.4.4" \
-              -e "PUID=99" \
-              -e "PGID=100" \
-              -p 8080:8080 \
+              -e "LISTEN_PORT=443" \
+              -e "DNS_SERVERS=8.8.8.8,8.8.4.4" \
+              -e "TUNNEL_MODE=split-include" \
+              -e "TUNNEL_ROUTES=192.168.1.0/24" \
+              -e "SPLIT_DNS_DOMAINS=example.com" \
               -p 8999:8999 \
               -p 8999:8999/udp \
-              qbittorrentvpn
+              openconnect
 ```
 
 ## Advanced Configuration:
@@ -51,12 +49,12 @@ This container allows for advanced configurations for power users who know what 
 ### Environment Variables
 | Variable | Required | Function | Example |
 |----------|----------|----------|----------|
-|`LISTEN_PORT`| No | Listening port for VPN connections|`VPN_ENABLED=yes`|
-|`DNS_SERVERS`| No | Comma delimited name servers |`LAN_NETWORK=192.168.1.0/24`|
-|`TUNNEL_MODE`| No | Tunnel mode (all\|split-include) |`NAME_SERVERS=8.8.8.8,8.8.4.4`|
-|`TUNNEL_ROUTES`| No | Comma delimited tunnel routes |`PUID=99`|
-|`SPLIT_DNS_DOMAINS`| No | Comma delimited dns domains |`PGID=100`|
-|`POWER_USER`| No | Allows for advanced manual configuration via host mounted /config volume |`PGID=100`|
+|`LISTEN_PORT`| No | Listening port for VPN connections|`LISTEN_PORT=4443`|
+|`DNS_SERVERS`| No | Comma delimited name servers |`DNS_SERVERS=8.8.8.8,8.8.4.4`|
+|`TUNNEL_MODE`| No | Tunnel mode (all\|split-include) |`TUNNEL_MODE=split-include`|
+|`TUNNEL_ROUTES`| No | Comma delimited tunnel routes (Accepts full subnet and CIDR notation) |`TUNNEL_ROUTES=192.168.1.0/24`|
+|`SPLIT_DNS_DOMAINS`| No | Comma delimited dns domains |`SPLIT_DNS_DOMAINS=example.com`|
+|`POWER_USER`| No | Allows for advanced manual configuration via host mounted /config volume |`POWER_USER=no`|
 
 ### Volumes
 | Volume | Required | Function | Example |
@@ -88,16 +86,14 @@ $ docker build -t qbittorrentvpn .
 ```
 $ docker run --privileged  -d \
               -v /your/config/path/:/config \
-              -v /your/downloads/path/:/downloads \
-              -e "VPN_ENABLED=yes" \
-              -e "LAN_NETWORK=192.168.1.0/24" \
-              -e "NAME_SERVERS=8.8.8.8,8.8.4.4" \
-              -e "PUID=99" \
-              -e "PGID=100" \
-              -p 8080:8080 \
+              -e "LISTEN_PORT=443" \
+              -e "DNS_SERVERS=8.8.8.8,8.8.4.4" \
+              -e "TUNNEL_MODE=split-include" \
+              -e "TUNNEL_ROUTES=192.168.1.0/24" \
+              -e "SPLIT_DNS_DOMAINS=example.com" \
               -p 8999:8999 \
               -p 8999:8999/udp \
-              qbittorrentvpn
+              openconnect
 ```
 
 This will start a container as described in the "Run container from Docker registry" section.
