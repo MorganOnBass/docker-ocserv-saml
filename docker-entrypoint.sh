@@ -9,7 +9,7 @@ chmod a+x /config/*.sh
 
 ##### Verify Variables #####
 export POWER_USER=$(echo "${POWER_USER}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
- Check POWER_USER env var
+# Check POWER_USER env var
 if [[ ! -z "${POWER_USER}" ]]; then
 	echo "$(date) [info] POWER_USER defined as '${POWER_USER}'"
 else
