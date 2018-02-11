@@ -3,8 +3,6 @@ FROM alpine:3.7
 MAINTAINER MarkusMcNugen
 # Forked from TommyLau for unRAID
 
-ENV OC_VERSION=0.11.10
-
 VOLUME /config
 
 # Install dependencies
