@@ -29,8 +29,10 @@ RUN buildDeps=" \
 	buildDeps=" \
 		curl \
 		g++ \
+		gawk \
 		gnutls-dev \
 		gpgme \
+		grep \
 		libev-dev \
 		libnl3-dev \
 		libseccomp-dev \
