@@ -58,7 +58,7 @@ $ docker run --privileged  -d \
 ```
 
 ## Advanced Configuration:
-This container allows for advanced configurations for power users who know what they are doing by **mounting the /config volume to a host directory**. Users can then drop in their own certs and modify the configuration. The **POWER_USER** environmental variable is required to stop the container from overwriting routes, dns servers, and split-dns domains. Some of these features involve setting up site to site VPN links, User Groups, Proxy Protocol support and more.
+This container allows for advanced configurations for power users who know what they are doing by **mounting the /config volume to a host directory**. Users can then drop in their own certs and modify the configuration. The **POWER_USER** environmental variable is required to stop the container from overwriting options set from container environment variables. Some advanced features include setting up site to site VPN links, User Groups, Proxy Protocol support and more.
 
 # Variables
 ## Environment Variables
