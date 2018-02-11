@@ -41,7 +41,7 @@ $ docker run --privileged  -d \
               markusmcnugen/openconnect
 ```
 
-## Intermediate Configuration (Providing own certs in /config/certs):
+## Intermediate Configuration (Providing own certs in /config/certs and running on port 443):
 Cert files are stored in /config/certs. It will automatically generate certs if the following two files are not present in the cert directory:<br>
 server-key.pem<br>
 server-cert.pem
