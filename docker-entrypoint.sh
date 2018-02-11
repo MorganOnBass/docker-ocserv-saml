@@ -21,7 +21,7 @@ export LISTEN_PORT=$(echo "${LISTEN_PORT}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 # Check PROXY_SUPPORT env var
 if [[ ! -z "${LISTEN_PORT}" ]]; then
 	echo "$(date) [info] LISTEN_PORT defined as '${LISTEN_PORT}'"
-	echo "$(date) Make sure you changed the 4443 port in container settings to expose the port you selected!"
+	echo "$(date) [warn] Make sure you changed the 4443 port in container settings to expose the port you selected!"
 else
 	echo "$(date) [warn] LISTEN_PORT not defined,(via -e LISTEN_PORT), defaulting to '4443'"
 	export LISTEN_PORT="4443"
