@@ -3,7 +3,7 @@ FROM alpine:3.7
 MAINTAINER MarkusMcNugen
 # Forked from TommyLau for unRAID
 
-ENV OC_VERSION=$(curl -v --silent "https://ocserv.gitlab.io/www/changelog.html" 2>&1 | grep -m 1 'Version' | awk '/Version/ {print $2}')
+ENV OC_VERSION=$(curl --silent "https://ocserv.gitlab.io/www/changelog.html" 2>&1 | grep -m 1 'Version' | awk '/Version/ {print $2}')
 
 VOLUME /config
 
