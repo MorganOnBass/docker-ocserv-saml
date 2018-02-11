@@ -59,7 +59,7 @@ This container allows for advanced configurations for power users who know what 
 ### Volumes
 | Volume | Required | Function | Example |
 |----------|----------|----------|----------|
-| `config` | Yes | OpenConnect config files | `/your/config/path/:/config`|
+| `config` | No | OpenConnect config files | `/your/config/path/:/config`|
 
 ### Ports
 | Port | Proto | Required | Function | Example |
