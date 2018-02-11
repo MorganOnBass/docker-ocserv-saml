@@ -22,8 +22,8 @@ The container is available from the Docker registry and this is the simplest way
 ### Without customizing cert variables
 ```
 $ docker run --privileged  -d \
-              -v /your/config/path/:/config \
-              -p 4443:4443 \
+              -v /your/c
+              -p 4443:4443 \
               -p 4443:4443/udp \
               markusmcnugen/openconnect
 ```
