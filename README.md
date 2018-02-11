@@ -18,17 +18,31 @@ OpenConnect server is an SSL VPN server. Its purpose is to be a secure, small, f
 # Run container from Docker registry
 The container is available from the Docker registry and this is the simplest way to get it.
 
-## Basic Configuration:
-
+## Basic Configuration (Container makes certs automatically or you can specify values manually):
+### Without customizing cert variables
 ```
 $ docker run --privileged  -d \
               -v /your/config/path/:/config \
               -p 4443:4443 \
               -p 4443:4443/udp \
-              markusmcnugen/markusmcnugen
+              markusmcnugen/openconnect
+```
+### With customizing cert variables
+```
+$ docker run --privileged  -d \
+              -v /your/config/path/:/config \
+              -p 4443:4443 \
+              -p 4443:4443/udp \
+              -e "CA_CN=VPN CA" \
+              -e "CA_ORG=OCSERV" \
+              -e "CA_DAYS=9999" \
+              -e "SRV_CN=vpn.example.com" \
+              -e "SRV_ORG=MyCompany" \
+              -e "SRV_DAYS=9999" \
+              markusmcnugen/openconnect
 ```
 
-## Intermediate Configuration:
+## Intermediate Configuration (Providing own certs in /config/certs):
 ```
 $ docker run --privileged  -d \
               -v /your/config/path/:/config \
@@ -39,7 +53,7 @@ $ docker run --privileged  -d \
               -e "SPLIT_DNS_DOMAINS=example.com" \
               -p 443:443 \
               -p 443:443/udp \
-              openconnect
+              markusmcnugen/openconnect
 ```
 
 ## Advanced Configuration:
@@ -83,8 +97,8 @@ To build this container, clone the repository and cd into it.
 
 ### Build it:
 ```
-$ cd /repo/location/qbittorrentvpn
-$ docker build -t qbittorrentvpn .
+$ cd /repo/location/openconnect
+$ docker build -t openconnect .
 ```
 ### Run it:
 ```
