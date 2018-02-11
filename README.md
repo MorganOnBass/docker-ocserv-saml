@@ -1,7 +1,5 @@
-[preview]: https://raw.githubusercontent.com/MarkusMcNugen/docker-templates/master/qbittorrentvpn/Screenshot.png "qBittorrent Preview"
-
 # OpenConnect VPN Server
-OpenConnect server is an SSL VPN server. Its purpose is to be a secure, small, fast and configurable VPN server. It implements the OpenConnect SSL VPN protocol, and has also (currently experimental) compatibility with clients using the AnyConnect SSL VPN protocol. The OpenConnect protocol provides a dual TCP/UDP VPN channel, and uses the standard IETF security protocols to secure it.
+OpenConnect server is an SSL VPN server. Its purpose is to be a secure, small, fast and configurable VPN server. It implements the OpenConnect SSL VPN protocol, and has also (currently experimental) compatibility with clients using the AnyConnect SSL VPN protocol. The OpenConnect protocol provides a dual TCP/UDP VPN channel, and uses the standard IETF security protocols to secure it. The OpenConnect client is multi-platform and available [here](http://www.infradead.org/openconnect/).
 
 [Homepage](https://ocserv.gitlab.io/www/platforms.html)<br>
 [Documentation](https://ocserv.gitlab.io/www/manual.html)<br>
@@ -38,20 +36,20 @@ $ docker run --privileged  -d \
               -e "TUNNEL_MODE=split-include" \
               -e "TUNNEL_ROUTES=192.168.1.0/24" \
               -e "SPLIT_DNS_DOMAINS=example.com" \
-              -p 4443:4443 \
-              -p 4443:4443/udp \
+              -p 443:443 \
+              -p 443:443/udp \
               openconnect
 ```
 
 ## Advanced Configuration:
-This container allows for advanced configurations for power users who know what they are doing by **mounting the /config volume to a host directory**. Users can then drop in their own certs and modify the configuration. The **POWER_USER** environmental variable is required for Some of these features involve setting up site to site VPN links, User Groups, TCP Proxy support
+This container allows for advanced configurations for power users who know what they are doing by **mounting the /config volume to a host directory**. Users can then drop in their own certs and modify the configuration. The **POWER_USER** environmental variable is required for Some of these features involve setting up site to site VPN links, User Groups, TCP Proxy support and more.
 
 ### Environment Variables
 | Variable | Required | Function | Example |
 |----------|----------|----------|----------|
 |`LISTEN_PORT`| No | Listening port for VPN connections|`LISTEN_PORT=4443`|
 |`DNS_SERVERS`| No | Comma delimited name servers |`DNS_SERVERS=8.8.8.8,8.8.4.4`|
-|`TUNNEL_MODE`| No | Tunnel mode (all\|split-include) |`TUNNEL_MODE=split-include`|
+|`TUNNEL_MODE`| No | Tunnel mode (all \| split-include) |`TUNNEL_MODE=split-include`|
 |`TUNNEL_ROUTES`| No | Comma delimited tunnel routes (Accepts full subnet and CIDR notation) |`TUNNEL_ROUTES=192.168.1.0/24`|
 |`SPLIT_DNS_DOMAINS`| No | Comma delimited dns domains |`SPLIT_DNS_DOMAINS=example.com`|
 |`POWER_USER`| No | Allows for advanced manual configuration via host mounted /config volume |`POWER_USER=no`|
@@ -68,6 +66,11 @@ This container allows for advanced configurations for power users who know what 
 | `4443` | UDP | Yes | OpenConnect server UDP listening port | `4443:4443/udp`|
 
 ## How to use this OpenConnect Server Docker
+Install and run the docker container with your chosen options. Port forward incoming traffic on your router some outside port to the containers IP and the listening port you chose.
+
+### Example:
+Incoming Outside Port 4443 Forwarding TCP and UDP to the OpenConnect Servers inside IP address and listening port
+![Port Forward Example](https://raw.githubusercontent.com/MarkusMcNugen/docker-templates/master/openconnect/Port%20Forward%20Example.png)
 
 ## Issues
 If you are having issues with this container please submit an issue on GitHub.
