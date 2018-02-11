@@ -3,6 +3,8 @@ FROM alpine:3.7
 MAINTAINER MarkusMcNugen
 # Forked from TommyLau for unRAID
 
+ENV OC_VERSION=0.11.10
+
 VOLUME /config
 
 # Install dependencies
@@ -24,7 +26,6 @@ RUN buildDeps=" \
 	"; \
 	set -x \
 	&& apk add --update --virtual .build-deps $buildDeps \
-	&& export OC_VERSION=$(curl --silent "https://ocserv.gitlab.io/www/changelog.html" 2>&1 | grep -m 1 'Version' | awk '/Version/ {print $2}') \
 	&& curl -SL "ftp://ftp.infradead.org/pub/ocserv/ocserv-$OC_VERSION.tar.xz" -o ocserv.tar.xz \
 	&& curl -SL "ftp://ftp.infradead.org/pub/ocserv/ocserv-$OC_VERSION.tar.xz.sig" -o ocserv.tar.xz.sig \
 	&& gpg --keyserver pool.sks-keyservers.net --recv-key 7F343FA7 \
