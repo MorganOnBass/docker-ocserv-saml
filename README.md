@@ -22,7 +22,6 @@ The container is available from the Docker registry and this is the simplest way
 ### Without customizing cert variables
 ```
 $ docker run --privileged  -d \
-              -v /your/c
               -p 4443:4443 \
               -p 4443:4443/udp \
               markusmcnugen/openconnect
@@ -106,14 +105,9 @@ $ docker build -t openconnect .
 ### Run it:
 ```
 $ docker run --privileged  -d \
-              -v /your/config/path/:/config \
-              -e "LISTEN_PORT=443" \
-              -e "DNS_SERVERS=8.8.8.8,8.8.4.4" \
-              -e "TUNNEL_MODE=split-include" \
-              -e "TUNNEL_ROUTES=192.168.1.0/24" \
-              -p 4443:4443 \
+              -p 4443:4443 \
               -p 4443:4443/udp \
               openconnect
 ```
 
-This will start a container as described in the "Run container from Docker registry" section.
+This will start a container as described in the "Run container from Docker registry" section. View the other run configurations for more advanced setups.
