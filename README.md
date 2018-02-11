@@ -18,7 +18,7 @@ OpenConnect server is an SSL VPN server. Its purpose is to be a secure, small, f
 # Run container from Docker registry
 The container is available from the Docker registry and this is the simplest way to get it.
 
-## Basic Configuration (Container makes certs automatically or you can specify values manually):
+## Basic Configuration (Container makes certs automatically or you can specify cert variables)
 ### Without customizing cert variables
 ```
 $ docker run --privileged  -d \
@@ -43,6 +43,9 @@ $ docker run --privileged  -d \
 ```
 
 ## Intermediate Configuration (Providing own certs in /config/certs):
+Cert files are stored in /config/certs. It will automatically generate certs if the following two files are not present in the cert directory:<br>
+server-key.pem<br>
+server-cert.pem
 ```
 $ docker run --privileged  -d \
               -v /your/config/path/:/config \
