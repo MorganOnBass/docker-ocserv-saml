@@ -30,8 +30,7 @@ $ docker run --privileged  -d \
 ### With customizing cert variables
 ```
 $ docker run --privileged  -d \
-              -v /your/config/path/:/config \
-              -p 4443:4443 \
+              -p 4443:4443 \
               -p 4443:4443/udp \
               -e "CA_CN=VPN CA" \
               -e "CA_ORG=OCSERV" \
