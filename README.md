@@ -64,7 +64,7 @@ This container allows for advanced configurations for power users who know what 
 ### Ports
 | Port | Proto | Required | Function | Example |
 |----------|----------|----------|----------|----------|
-| `4443` | TCP | Yes | OpenConnect server TCP listening port | `4443:4443/tcp`|
+| `4443` | TCP | Yes | OpenConnect server TCP listening port | `4443:4443`|
 | `4443` | UDP | Yes | OpenConnect server UDP listening port | `4443:4443/udp`|
 
 ## How to use this OpenConnect Server Docker
