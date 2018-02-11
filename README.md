@@ -62,7 +62,8 @@ $ docker run --privileged  -d \
 ## Advanced Configuration:
 This container allows for advanced configurations for power users who know what they are doing by **mounting the /config volume to a host directory**. Users can then drop in their own certs and modify the configuration. The **POWER_USER** environmental variable is required for Some of these features involve setting up site to site VPN links, User Groups, TCP Proxy support and more.
 
-### Environment Variables
+# Variables
+## Environment Variables
 | Variable | Required | Function | Example |
 |----------|----------|----------|----------|
 |`LISTEN_PORT`| No | Listening port for VPN connections|`LISTEN_PORT=4443`|
@@ -72,30 +73,30 @@ This container allows for advanced configurations for power users who know what 
 |`SPLIT_DNS_DOMAINS`| No | Comma delimited dns domains |`SPLIT_DNS_DOMAINS=example.com`|
 |`POWER_USER`| No | Allows for advanced manual configuration via host mounted /config volume |`POWER_USER=no`|
 
-### Volumes
+## Volumes
 | Volume | Required | Function | Example |
 |----------|----------|----------|----------|
 | `config` | No | OpenConnect config files | `/your/config/path/:/config`|
 
-### Ports
+## Ports
 | Port | Proto | Required | Function | Example |
 |----------|----------|----------|----------|----------|
 | `4443` | TCP | Yes | OpenConnect server TCP listening port | `4443:4443`|
 | `4443` | UDP | Yes | OpenConnect server UDP listening port | `4443:4443/udp`|
 
-## How to use this OpenConnect Server Docker
+# How to use this OpenConnect Server Docker
 Install and run the docker container with your chosen options. Port forward incoming traffic on your router, some outside port to the containers IP and the listening port on the inside.
 
-### Example:
+## Example:
 Incoming Outside Port 4443 Forwarding TCP and UDP to the OpenConnect Servers inside IP address and listening port
 ![Port Forward Example](https://raw.githubusercontent.com/MarkusMcNugen/docker-templates/master/openconnect/Port%20Forward%20Example.png)
 
-## Issues
+# Issues
 If you are having issues with this container please submit an issue on GitHub.
 Please provide logs, docker version and other information that can simplify reproducing the issue.
 Using the latest stable verison of Docker is always recommended. Support for older version is on a best-effort basis.
 
-## Building the container yourself
+# Building the container yourself
 To build this container, clone the repository and cd into it.
 
 ### Build it:
