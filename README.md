@@ -66,7 +66,7 @@ This container allows for advanced configurations for power users who know what 
 | `4443` | UDP | Yes | OpenConnect server UDP listening port | `4443:4443/udp`|
 
 ## How to use this OpenConnect Server Docker
-Install and run the docker container with your chosen options. Port forward incoming traffic on your router some outside port to the containers IP and the listening port you chose.
+Install and run the docker container with your chosen options. Port forward incoming traffic on your router, some outside port to the containers IP and the listening port on the inside.
 
 ### Example:
 Incoming Outside Port 4443 Forwarding TCP and UDP to the OpenConnect Servers inside IP address and listening port
