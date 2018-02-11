@@ -9,6 +9,7 @@ VOLUME /config
 RUN buildDeps=" \
 		curl \
 		g++ \
+		gawk \
 		gnutls-dev \
 		gpgme \
 		libev-dev \
