@@ -12,7 +12,7 @@ OpenConnect server is an SSL VPN server. Its purpose is to be a secure, small, f
 * Modification of the listening port for more networking versatility
 * Customizing the DNS servers used for queries over the VPN
 * Supports tunneling all traffic over the VPN or tunneling only specific routes via split-include
-* Config directory can be mounted to a host directory for persistance 
+* Config directory can be mounted to a host directory for persistence 
 * Advanced manual configuration for power users
 
 # Run container from Docker registry
