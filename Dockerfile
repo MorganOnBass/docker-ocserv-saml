@@ -26,26 +26,6 @@ RUN buildDeps=" \
 	"; \
 	set -x \
 	&& apk add --update --virtual .build-deps $buildDeps \
-	buildDeps=" \
-		curl \
-		g++ \
-		gawk \
-		gnutls-dev \
-		gpgme \
-		grep \
-		libev-dev \
-		libnl3-dev \
-		libseccomp-dev \
-		linux-headers \
-		linux-pam-dev \
-		lz4-dev \
-		make \
-		readline-dev \
-		tar \
-		xz \
-	"; \
-	set -x \
-	&& apk add --update --virtual .build-deps $buildDeps \
 	&& export OC_VERSION=$(curl --silent "https://ocserv.gitlab.io/www/changelog.html" 2>&1 | grep -m 1 'Version' | awk '/Version/ {print $2}') \
 	&& curl -SL "ftp://ftp.infradead.org/pub/ocserv/ocserv-$OC_VERSION.tar.xz" -o ocserv.tar.xz \
 	&& curl -SL "ftp://ftp.infradead.org/pub/ocserv/ocserv-$OC_VERSION.tar.xz.sig" -o ocserv.tar.xz.sig \
