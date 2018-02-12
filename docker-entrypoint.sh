@@ -116,7 +116,7 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 				IFS='/' read -ra ip_subnet_list <<< "${tunnel_route_item}"
 				STRLENGTH=$(echo -n ${ip_subnet_list[1]} | wc -m)
 				echo "Subnet length = ${STRLENGTH}"
-				if [[ $STRLENGTH > 2 ]]; then
+				if [[ $STRLENGTH > "2" ]]; then
 					IP=$(sipcalc ${ip_subnet_list[0]} ${ip_subnet_list[1]} | awk '/Host address/ {print $4; exit}')
 					NETMASK=$(sipcalc ${ip_subnet_list[0]} ${ip_subnet_list[1]} | awk '/Network mask/ {print $4; exit}')
 				else
