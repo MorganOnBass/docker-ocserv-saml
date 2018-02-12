@@ -92,7 +92,7 @@ Incoming Outside Port 4443 Forwarding TCP and UDP to the OpenConnect Servers ins
 ## Add User/Change Password
 Add users by executing the following command on the host running the docker container
 ```
-docker exec -ti openconnect ocpasswd -c /etc/ocserv/ocpasswd markusmcnugen
+docker exec -ti openconnect ocpasswd -c /config/ocpasswd markusmcnugen
 Enter password:
 Re-enter password:
 ```
@@ -100,8 +100,12 @@ Re-enter password:
 ## Delete User
 Delete users by executing the following command on the host running the docker container
 ```
-docker exec -ti openconnect ocpasswd -c /etc/ocserv/ocpasswd -d markusmcnugen
+docker exec -ti openconnect ocpasswd -c /config/ocpasswd -d markusmcnugen
 ```
+
+## Login and Logout Log Messages
+After a user successfully logins to the VPN a message will be logged in the docker log. Example of login message:
+
 
 # Issues
 If you are having issues with this container please submit an issue on GitHub.
