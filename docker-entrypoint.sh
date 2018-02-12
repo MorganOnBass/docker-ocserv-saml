@@ -114,7 +114,8 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 			if [[ -z "$TUNDUP" ]]; then
 				tunnel_route_item=$(echo "${tunnel_route_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 				IFS='/' read -ra ip_subnet_list <<< "${tunnel_route_item}"
-				if [[ STRLENGTH=$(echo -n ${ip_subnet_list[1]} | wc -m) > 2 ]]; then
+				STRLENGTH=$(echo -n ${ip_subnet_list[1]} | wc -m)
+				if [[ $STRLENGTH > 2 ]]; then
 					IP=$(sipcalc ${ip_subnet_list[0]} ${ip_subnet_list[1]} | awk '/Host address/ {print $4; exit}')
 					NETMASK=$(sipcalc ${ip_subnet_list[0]} ${ip_subnet_list[1]} | awk '/Network mask/ {print $4; exit}')
 				else
