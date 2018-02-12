@@ -108,12 +108,19 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 		# split comma seperated string into list from TUNNEL_ROUTES env variable
 		IFS=',' read -ra tunnel_route_list <<< "${TUNNEL_ROUTES}"
 		# process name servers in the list
+		echo "tunnel_route_list"
 		for tunnel_route_item in "${tunnel_route_list[@]}"; do
 			TUNDUP=$(cat /config/ocserv.conf | grep "route=${tunnel_route_item}")
 			if [[ -z "$TUNDUP" ]]; then
 				tunnel_route_item=$(echo "${tunnel_route_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-				IP=$(ipcalc -b ${tunnel_route_item} | awk '/Address/ {print $2}')
-				NETMASK=$(ipcalc -b ${tunnel_route_item} | awk '/Netmask/ {print $2}')
+				IFS='/' read -ra ip_subnet_list <<< "${tunnel_route_item}"
+				if [[ STRLENGTH=$(echo -n ${ip_subnet_list[1]} | wc -m) > 2 ]]; then
+					IP=$(sipcalc ${ip_subnet_list[0]} ${ip_subnet_list[1]} | awk '/Host address/ {print $4; exit}')
+					NETMASK=$(sipcalc ${ip_subnet_list[0]} ${ip_subnet_list[1]} | awk '/Network mask/ {print $4; exit}')
+				else
+					IP=$(ipcalc -b ${ip_subnet_list} | awk '/Address/ {print $2}')
+					NETMASK=$(ipcalc -b ${tunnel_route_item} | awk '/Netmask/ {print $2}')
+				fi
 
 				echo "$(date) [info] Adding route=$IP/$NETMASK to ocserv.conf"
 				echo "route=$IP/$NETMASK" >> /config/ocserv.conf
