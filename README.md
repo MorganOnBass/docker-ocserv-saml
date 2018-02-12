@@ -83,11 +83,25 @@ This container allows for advanced configurations for power users who know what 
 | `4443` | UDP | Yes | OpenConnect server UDP listening port | `4443:4443/udp`|
 
 # How to use this OpenConnect Server Docker
-Install and run the docker container with your chosen options. Port forward incoming traffic on your router, some outside port to the containers IP and the listening port on the inside.
+Install and run the docker container with your chosen options. Port forward incoming traffic on your router, some outside port to the containers IP and the listening port on the inside. After port forwarding is established you will need to create VPN accounts for users to login with usernames and passwords.
 
 ## Example:
 Incoming Outside Port 4443 Forwarding TCP and UDP to the OpenConnect Servers inside IP address and listening port
 ![Port Forward Example](https://raw.githubusercontent.com/MarkusMcNugen/docker-templates/master/openconnect/Port%20Forward%20Example.png)
+
+## Add User/Change Password
+Add users by executing the following command on the host running the docker container
+```
+docker exec -ti openconnect ocpasswd -c /etc/ocserv/ocpasswd markusmcnugen
+Enter password:
+Re-enter password:
+```
+
+## Delete User
+Delete users by executing the following command on the host running the docker container
+```
+docker exec -ti openconnect ocpasswd -c /etc/ocserv/ocpasswd -d markusmcnugen
+```
 
 # Issues
 If you are having issues with this container please submit an issue on GitHub.
