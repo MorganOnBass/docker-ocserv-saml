@@ -112,21 +112,22 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 			tunnel_route_item=$(echo "${tunnel_route_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 			IFS='/' read -ra ip_subnet_list <<< "${tunnel_route_item}"
 			STRLENGTH=$(echo -n ${ip_subnet_list[1]} | wc -m)
-			echo "Subnet length = ${STRLENGTH}"
 			if [[ $STRLENGTH > "2" ]]; then
+				echo "$(date) Full subnet mask detected in route ${tunnel_route_item}"
 				IP=$(sipcalc ${ip_subnet_list[0]} ${ip_subnet_list[1]} | awk '/Host address/ {print $4; exit}')
 				NETMASK=$(sipcalc ${ip_subnet_list[0]} ${ip_subnet_list[1]} | awk '/Network mask/ {print $4; exit}')
 			else
+				echo "$(date) CIDR submet mask detected in route ${tunnel_route_item}"
 				IP=$(ipcalc -b ${tunnel_route_item} | awk '/Address/ {print $2}')
 				NETMASK=$(ipcalc -b ${tunnel_route_item} | awk '/Netmask/ {print $2}')
 			fi
 			#IP=$(ipcalc -b ${tunnel_route_item} | awk '/Address/ {print $2; exit}')
 			#NETMASK=$(ipcalc -b ${tunnel_route_item} | awk '/Netmask/ {print $2; exit}')
-			#TUNDUP=$(cat /config/ocserv.conf | grep "route=${IP}/${NETMASK}")
-			#if [[ -z "$TUNDUP" ]]; then
-			#	echo "$(date) [info] Adding route=$IP/$NETMASK to ocserv.conf"
-			#	echo "route=$IP/$NETMASK" >> /config/ocserv.conf
-			#fi
+			TUNDUP=$(cat /config/ocserv.conf | grep "route=${IP}/${NETMASK}")
+			if [[ -z "$TUNDUP" ]]; then
+				echo "$(date) [info] Adding route=$IP/$NETMASK to ocserv.conf"
+				echo "route=$IP/$NETMASK" >> /config/ocserv.conf
+			fi
 		done
 	fi
 fi
