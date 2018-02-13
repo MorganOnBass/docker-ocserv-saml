@@ -50,7 +50,7 @@ RUN buildDeps=" \
 	&& apk del .build-deps \
 	&& rm -rf /var/cache/apk/* 
 
-RUN apk add --update bash rsync sipcalc
+RUN apk add --update bash rsync ipcalc
 
 ADD ocserv /etc/default/ocserv
 
