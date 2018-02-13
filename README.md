@@ -8,7 +8,7 @@ OpenConnect VPN server is an SSL VPN server that is secure, small, fast and conf
 # Docker Features
 * Base: Alpine 3.7
 * Latest OpenConnect Server 0.11.10
-* Size: 23.1MB
+* Size: 57.1MB 
 * Modification of the listening port for more networking versatility
 * Customizing the DNS servers used for queries over the VPN
 * Supports tunneling all traffic over the VPN or tunneling only specific routes via split-include
@@ -107,7 +107,7 @@ docker exec -ti openconnect ocpasswd -c /config/ocpasswd -d markusmcnugen
 After a user successfully logins to the VPN a message will be logged in the docker log.<br>
 *Example of login message:*
 ```
-[info] User markusmcnugen Connected - Server: 192.168.1.189 VPN IP: 192.168.255.194 Remote IP: 107.92.120.188 
+[info] User markusmcnugen Connected - Server: 192.168.1.165 VPN IP: 192.168.255.194 Remote IP: 107.92.120.188 
 ```
 
 *Example of logoff message:*
