@@ -104,8 +104,16 @@ docker exec -ti openconnect ocpasswd -c /config/ocpasswd -d markusmcnugen
 ```
 
 ## Login and Logout Log Messages
-After a user successfully logins to the VPN a message will be logged in the docker log. Example of login message:
+After a user successfully logins to the VPN a message will be logged in the docker log.<br>
+*Example of login message:*
+```
+[info] User markusmcnugen Connected - Server: 192.168.1.189 VPN IP: 192.168.255.194 Remote IP: 107.92.120.188 
+```
 
+*Example of logoff message:*
+```
+[info] User markusmcnugen Disconnected - Bytes In: 175856 Bytes Out: 4746819 Duration:63
+```
 
 # Issues
 If you are having issues with this container please submit an issue on GitHub.
