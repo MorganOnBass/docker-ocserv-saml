@@ -9,11 +9,11 @@ OpenConnect VPN server is an SSL VPN server that is secure, small, fast and conf
 * Base: Alpine 3.7
 * Latest OpenConnect Server 0.11.10
 * Size: 57.1MB 
-* Create certs automatically using default or provided values, or drop your own certs in /config/certs
 * Modification of the listening port for more networking versatility
 * Customizing the DNS servers used for queries over the VPN
 * Supports tunneling all traffic over the VPN or tunneling only specific routes via split-include
 * Config directory can be mounted to a host directory for persistence 
+* Create certs automatically using default or provided values, or drop your own certs in /config/certs
 * Advanced manual configuration for power users
 
 # Run container from Docker registry
