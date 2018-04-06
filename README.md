@@ -5,7 +5,7 @@
 # OpenConnect VPN Server
 OpenConnect VPN server is an SSL VPN server that is secure, small, fast and configurable. It implements the OpenConnect SSL VPN protocol and has also (currently experimental) compatibility with clients using the AnyConnect SSL VPN protocol. The OpenConnect protocol provides a dual TCP/UDP VPN channel and uses the standard IETF security protocols to secure it. The OpenConnect client is multi-platform and available [here](http://www.infradead.org/openconnect/). Alternatively, you can try connecting using the official Cisco AnyConnect client (Confirmed working on Android).
 
-This container is an automated build linked to [alpine:edge](https://hub.docker.com/_/alpine/). The dockerfile was written to always download and compile the latest release of OpenConnect VPN server when built. 
+This container is an automated build linked to [alpine](https://hub.docker.com/_/alpine/). The dockerfile was written to always download and compile the latest release of OpenConnect VPN server when built. 
 
 [Homepage](https://ocserv.gitlab.io/www/platforms.html)
 [Documentation](https://ocserv.gitlab.io/www/manual.html)
