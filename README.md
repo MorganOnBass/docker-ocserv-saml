@@ -75,7 +75,7 @@ This container allows for advanced configurations for power users who know what 
 |----------|----------|----------|----------|
 |`LISTEN_PORT`| No | Listening port for VPN connections|`LISTEN_PORT=4443`|
 |`DNS_SERVERS`| No | Comma delimited name servers |`DNS_SERVERS=8.8.8.8,8.8.4.4`|
-|`TUNNEL_MODE`| No | Tunnel mode (all \| split-include) |`TUNNEL_MODE=split-include`|
+|`TUNNEL_MODE`| No | Tunnel mode (all / split-include) |`TUNNEL_MODE=split-include`|
 |`TUNNEL_ROUTES`| No | Comma delimited tunnel routes in CIDR notation |`TUNNEL_ROUTES=192.168.1.0/24`|
 |`SPLIT_DNS_DOMAINS`| No | Comma delimited dns domains |`SPLIT_DNS_DOMAINS=example.com`|
 |`POWER_USER`| No | Allows for advanced manual configuration via host mounted /config volume |`POWER_USER=no`|
