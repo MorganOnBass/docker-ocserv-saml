@@ -12,7 +12,7 @@ This container is an automated build linked to [alpine:edge](https://hub.docker.
 [Source](https://gitlab.com/ocserv/ocserv)
 
 # Docker Features
-* Base: Alpine 3.7
+* Base: Alpine Edge
 * Latest OpenConnect Server 0.11.10
 * Size: 57.1MB 
 * Modification of the listening port for more networking versatility
