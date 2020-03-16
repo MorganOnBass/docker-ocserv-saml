@@ -42,6 +42,8 @@ services:
       TUNNEL_ROUTES: '192.168.1.0/24, 192.168.69.0/24'
       DNS_SERVERS: 192.168.1.1
       SPLIT_DNS_DOMAINS: 'internal.domain.com'
+      CLIENTNET: 192.168.248.0
+      CLIENTNETMASK: 255.255.255.128
       BASEDN: 'dc=example,dc=com'
       LDAPURI: 'ldap://192.168.1.1/'
       BINDDN: 'CN=ocserv,CN=Users,DC=example,DC=com'
@@ -86,6 +88,8 @@ All of the relevant config files are in the /config volume. You may edit them to
 |`TUNNEL_MODE`| No | Tunnel mode (all / split-include) |`split-include`|
 |`TUNNEL_ROUTES`| No | Comma delimited tunnel routes in CIDR notation |`192.168.1.0/24`|
 |`SPLIT_DNS_DOMAINS`| No | Comma delimited dns domains |`example.com`|
+|`CLIENTNET`| No | Network from which to assign client IPs |`192.168.255.0`|
+|`CLIENTNETMASK`| No | Client subnet mask |`255.255.255.0`|
 |`BASEDN`| Yes | Base DN for LDAP Search |`dc=example,dc=com`|
 |`LDAPURI`| Yes | URI of LDAP Server |`ldap://192.168.1.1`|
 |`BINDDN`| Yes | Account to bind PAM to LDAP |`CN=ocserv,CN=Users,DC=example,DC=com`|

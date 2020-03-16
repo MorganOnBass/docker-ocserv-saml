@@ -10,9 +10,11 @@ services:
     environment:
       LISTEN_PORT: 443
       TUNNEL_MODE: 'split_include'
-      TUNNEL_ROUTES: '10.102.0.0/25, 192.168.69.0/24'
+      TUNNEL_ROUTES: '10.1.0.0/25, 192.168.69.0/24'
       DNS_SERVERS: 192.168.1.1
       SPLIT_DNS_DOMAINS: 'internal.domain.com'
+      CLIENTNET: 192.168.248.0
+      CLIENTNETMASK: 255.255.255.128
       BASEDN: 'dc=example,dc=com'
       LDAPURI: 'ldap://192.168.1.1/'
       BINDDN: 'CN=ocserv,CN=Users,DC=example,DC=com'
