@@ -131,10 +131,10 @@ if [[ ! -z "${SPLIT_DNS_DOMAINS}" ]]; then
 	done
 fi
 if [[ ! -z "${CLIENTNET}" ]]; then
-    sed -i "s/^ipv4-network.*$/ipv4-network ${CLIENTNET}/" /config/ocserv.conf
+    sed -i "s/^ipv4-network.*$/ipv4-network = ${CLIENTNET}/" /config/ocserv.conf
 fi
 if [[ ! -z "${CLIENTNETMASK}" ]]; then
-    sed -i "s/^ipv4-netmask.*$/ipv4-network ${CLIENTNETMASK}/" /config/ocserv.conf
+    sed -i "s/^ipv4-netmask.*$/ipv4-netmask = ${CLIENTNETMASK}/" /config/ocserv.conf
 fi
 
 # Configure pam-ldap
