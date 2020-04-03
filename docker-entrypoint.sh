@@ -1,13 +1,11 @@
 #!/bin/bash
 
 # Copy default config files if removed
-if [[ ! -e /config/ocserv.conf || ! -e /config/connect.sh || ! -e /config/disconnect.sh ]]; then
-	echo "$(date) [err] Required config files are missing. Replacing with default backups!"
+if [[ ! -e /config/ocserv.conf || ! -e /config/connect.sh || ! -e /config/disconnect.sh || \
+	  ! -e /config/sp-metadata.xml || ! -e /config/sso.conf ]]; then
+	echo "$(date) [err] Required config files are missing."
+	echo "\t [err] Please see the documentation at https://github.com/morganonbass/docker-ocserv-saml"
 	rsync -vzr --ignore-existing "/etc/default/ocserv/" "/config"
-fi
-if [ ! -s /config/pam_ldap.conf ]; then
-    echo "pam_ldap config is empty, initialising..."
-	rsync -vzr --ignore-existing "/etc/default/pam_ldap/" "/config"
 fi
 
 chmod a+x /config/*.sh
@@ -86,10 +84,8 @@ elif [[ ${TUNNEL_MODE} == "split-include" ]]; then
 	# process name servers in the list
 	for tunnel_route_item in "${tunnel_route_list[@]}"; do
 		tunnel_route_item=$(echo "${tunnel_route_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-		IFS='/' read -ra ip_subnet_list <<< "${tunnel_route_item}"
-		STRLENGTH=$(echo -n ${ip_subnet_list[1]} | wc -m)
-		IP=$(sipcalc ${ip_subnet_list[0]} ${ip_subnet_list[1]} | awk '/Host address/ {print $4; exit}')
-		NETMASK=$(sipcalc ${ip_subnet_list[0]} ${ip_subnet_list[1]} | awk '/Network mask/ {print $4; exit}')
+		IP=$(sipcalc ${tunnel_route_item} | awk '/Network address/ {print $4; exit}')
+		NETMASK=$(sipcalc ${tunnel_route_item} | awk '/Network mask/ {print $4; exit}')
 		TUNDUP=$(cat /config/ocserv.conf | grep "route=${IP}/${NETMASK}")
 		if [[ -z "$TUNDUP" ]]; then
 			echo "$(date) [info] Adding route=$IP/$NETMASK to ocserv.conf"
@@ -137,24 +133,9 @@ if [[ ! -z "${CLIENTNETMASK}" ]]; then
     sed -i "s/^ipv4-netmask.*$/ipv4-netmask = ${CLIENTNETMASK}/" /config/ocserv.conf
 fi
 
-# Configure pam-ldap
-if [[ ! -z "${BASEDN}" ]]; then
-    sed -i "s/^base.*$/base ${BASEDN}/" /config/pam_ldap.conf
-fi
-if [[ ! -z "${LDAPURI}" ]]; then
-    sed -i "s|^uri.*$|uri ${LDAPURI}|" /config/pam_ldap.conf
-fi
-if [[ ! -z "${BINDDN}" ]]; then
-    sed -i "s/^binddn.*$/binddn ${BINDDN}/" /config/pam_ldap.conf
-fi
-if [[ ! -z "${BINDPW}" ]]; then
-    sed -i "s/^bindpw.*$/bindpw ${BINDPW}/" /config/pam_ldap.conf
-fi
-if [[ ! -z "${SEARCHSCOPE}" ]]; then
-    sed -i "s/^scope.*$/scope ${SEARCHSCOPE}/" /config/pam_ldap.conf
-fi
-if [[ ! -z "${PAM_LOGIN_ATTRIBUTE}" ]]; then
-    sed -i "s/^pam_login_attribute.*$/pam_login_attribute ${PAM_LOGIN_ATTRIBUTE}/" /config/pam_ldap.conf
+if [[ ! -z "${HOSTNAME}" ]]; then
+	sed -i "s/^hostname.*$/hostname = ${HOSTNAME}/" /config/ocserv.conf
+	sed -i "s/https:\/\/[^\/?#]*/https:\/\/${HOSTNAME}/g" /config/sp-metadata.xml
 fi
 
 ##### Generate certs if none exist #####
@@ -216,8 +197,8 @@ else
 	echo "$(date) [info] Using existing certificates in /config/certs"
 fi
 
-# Open ipv4 ip forward
-sysctl -w net.ipv4.ip_forward=1
+# Open ipv4 ip forward (done by default on alpine though, how kind)
+# sysctl -w net.ipv4.ip_forward=1
 
 # Enable NAT forwarding
 iptables -t nat -A POSTROUTING -j MASQUERADE

@@ -3,11 +3,12 @@ version: "3"
 services:
   ocserv:
     container_name: ocserv
-    image: morganonbass/ocserv-ldap:latest
+    image: morganonbass/ocserv-saml:latest
     ports:
       - "443:443/tcp"
       - "443:443/udp"
     environment:
+      HOSTNAME: vpn.example.com
       LISTEN_PORT: 443
       TUNNEL_MODE: 'split_include'
       TUNNEL_ROUTES: '10.1.0.0/25, 192.168.69.0/24'
@@ -15,18 +16,6 @@ services:
       SPLIT_DNS_DOMAINS: 'internal.domain.com'
       CLIENTNET: 192.168.248.0
       CLIENTNETMASK: 255.255.255.128
-      BASEDN: 'dc=example,dc=com'
-      LDAPURI: 'ldap://192.168.1.1/'
-      BINDDN: 'CN=ocserv,CN=Users,DC=example,DC=com'
-      BINDPW: 'aSuperSecurePassword'
-      SEARCHSCOPE: 'sub'
-      PAM_LOGIN_ATTRIBUTE: 'userPrincipalName'
-      CA_CN: 'VPN CA'
-      CA_ORG: 'OCSERV'
-      CA_DAYS: 9999 
-      SRV_CN: 'vpn.example.com'
-      SRV_ORG: 'Example Company'
-      SRV_DAYS: 9999
     volumes:
       - './config/:/config/'
     cap_add:

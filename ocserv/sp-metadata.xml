@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+                  entityID="https://vpn.example.com/saml/sp/metadata/AC-SAML">
+    <SPSSODescriptor 
+      AuthnRequestsSigned="false" 
+      WantAssertionsSigned="true" 
+      protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+      <SingleLogoutService
+        Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        Location="https://vpn.example.com/+CSCOE+/saml/sp/logout" />
+      <SingleLogoutService 
+        Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" 
+        Location="https://vpn.example.com/+CSCOE+/saml/sp/logout"/>
+      <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</NameIDFormat>
+      <AssertionConsumerService 
+          Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+          Location="https://vpn.example.com/+CSCOE+/saml/sp/acs"
+          index="0" />
+        
+    </SPSSODescriptor>
+</EntityDescriptor>

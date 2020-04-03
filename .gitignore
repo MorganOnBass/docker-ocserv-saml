@@ -1,0 +1,11 @@
+Dockerfile.debian.old
+composetest/docker-compose.yaml
+composetest/config/connect.sh
+composetest/config/disconnect.sh
+composetest/config/idp-cert.pem
+composetest/config/idp-metadata.xml
+composetest/config/ocserv.conf
+composetest/config/sp-metadata.xml
+composetest/config/sso.conf
+composetest/config/certs/server-cert.pem
+composetest/config/certs/server-key.pem
