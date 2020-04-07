@@ -54,6 +54,7 @@ services:
 Then, create a directory called 'config' (or match your volume definition above if you differ from the example), and populate it with the following files:
 
 | File | Required | Details |
+|------|----------|---------|
 |`idp-metadata.xml`| Yes | Your SAML identity provider supplies this |
 |`idp-cert.pem`| Yes | Your SAML identity provider supplies this |
 |`certs/server-cert.pem`| No | Our certificate, for SSL/TLS and signing SAML communications if needed |
