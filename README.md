@@ -22,7 +22,7 @@ OpenConnect VPN server is an SSL VPN server that is secure, small, fast and conf
 The container is available from the Docker registry and this is the simplest way to get it. It needs a fair few environment variables, so I suggest using docker-compose.
 
 ## Quick Start
-If you have not already done so, install docker-compose in according with its [documentation.](https://docs.docker.com/compose/install/)
+If you have not already done so, install docker-compose in accordance with its [documentation.](https://docs.docker.com/compose/install/)
 
 In an empty directory, create a file called `docker-compose.yaml` and insert the below contents, substituting values suitable for your environment:
 ```docker
@@ -38,7 +38,7 @@ services:
     environment:
       HOSTNAME: 'vpn.example.com'
       LISTEN_PORT: 443
-      TUNNEL_MODE: 'split_include'
+      TUNNEL_MODE: 'split-include'
       TUNNEL_ROUTES: '192.168.1.0/24, 192.168.69.0/24'
       DNS_SERVERS: 192.168.1.1
       SPLIT_DNS_DOMAINS: 'internal.domain.com'
