@@ -41,7 +41,8 @@ services:
       TUNNEL_MODE: 'split-include'
       TUNNEL_ROUTES: '192.168.1.0/24, 192.168.69.0/24'
       DNS_SERVERS: 192.168.1.1
-      SPLIT_DNS_DOMAINS: 'internal.domain.com'
+      DEFAULT_DOMAIN: 'internal.example.com'
+      SPLIT_DNS_DOMAINS: 'internal.example.com'
       CLIENTNET: 192.168.248.0
       CLIENTNETMASK: 255.255.255.128
     volumes:
@@ -89,12 +90,13 @@ All of the relevant config files are in the /config volume. You may edit them to
 ## Environment Variables
 | Variable | Required | Function | Example |
 |----------|----------|----------|----------|
-|`HOSTNAME`| Yes | Hostname, needed to construct SAML parameters |`vpn.example.com`|
+|`HOSTNAME`| Yes | Hostname, needed to construct SAML parameters |`vpn.domain.com`|
 |`LISTEN_PORT`| No | Listening port for VPN connections|`443`|
 |`DNS_SERVERS`| No | Comma delimited name servers |`8.8.8.8,8.8.4.4`|
 |`TUNNEL_MODE`| No | Tunnel mode (all / split-include) |`split-include`|
 |`TUNNEL_ROUTES`| No | Comma delimited tunnel routes in CIDR notation |`192.168.1.0/24`|
-|`SPLIT_DNS_DOMAINS`| No | Comma delimited dns domains |`example.com`|
+|`DEFAULT_DOMAIN`| No | Default domain to advertise to clients (DNS search scope) |`internal.domain.com`|
+|`SPLIT_DNS_DOMAINS`| No | Comma delimited dns domains |`internal.domain.com`|
 |`CLIENTNET`| No | Network from which to assign client IPs |`192.168.255.0`|
 |`CLIENTNETMASK`| No | Client subnet mask |`255.255.255.0`|
 

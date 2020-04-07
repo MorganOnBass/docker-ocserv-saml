@@ -133,6 +133,10 @@ if [[ ! -z "${CLIENTNETMASK}" ]]; then
     sed -i "s/^ipv4-netmask.*$/ipv4-netmask = ${CLIENTNETMASK}/" /config/ocserv.conf
 fi
 
+if [[ ! -z "${DEFAULT_DOMAIN}" ]]; then
+	sed -i "s/^default-domain=.*$/default-domain = ${DEFAULT_DOMAIN}/" /config/ocserv.conf
+fi
+
 if [[ ! -z "${HOSTNAME}" ]]; then
 	sed -i "s/^hostname.*$/hostname = ${HOSTNAME}/" /config/ocserv.conf
 	sed -i "s/https:\/\/[^\/?#]*/https:\/\/${HOSTNAME}/g" /config/sp-metadata.xml

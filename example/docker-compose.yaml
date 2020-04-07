@@ -13,7 +13,8 @@ services:
       TUNNEL_MODE: 'split_include'
       TUNNEL_ROUTES: '10.1.0.0/25, 192.168.69.0/24'
       DNS_SERVERS: 192.168.1.1
-      SPLIT_DNS_DOMAINS: 'internal.domain.com'
+      DEFAULT_DOMAIN: 'internal.example.com'
+      SPLIT_DNS_DOMAINS: 'internal.example.com'
       CLIENTNET: 192.168.248.0
       CLIENTNETMASK: 255.255.255.128
     volumes:
