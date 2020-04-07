@@ -134,7 +134,7 @@ if [[ ! -z "${CLIENTNETMASK}" ]]; then
 fi
 
 if [[ ! -z "${DEFAULT_DOMAIN}" ]]; then
-	sed -i "s/^default-domain=.*$/default-domain = ${DEFAULT_DOMAIN}/" /config/ocserv.conf
+	sed -i "s/^default-domain =.*$/default-domain = ${DEFAULT_DOMAIN}/" /config/ocserv.conf
 fi
 
 if [[ ! -z "${HOSTNAME}" ]]; then
