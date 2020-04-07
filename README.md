@@ -11,7 +11,7 @@ OpenConnect VPN server is an SSL VPN server that is secure, small, fast and conf
 
 # Docker Features
 * Base: Alpine Latest
-* Latest OpenConnect Server 1.0.0 + SAML support
+* Latest OpenConnect Server 1.0.0 + SAML support implemented by me, [here](https://gitlab.com/morganofbass/ocserv)
 * SAML2 Authentication Support
 * Size: 57MB
 * Customizing the DNS servers used for queries over the VPN
