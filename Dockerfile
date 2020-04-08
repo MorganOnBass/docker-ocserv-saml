@@ -63,7 +63,6 @@ RUN buildDeps=" \
       make install && \
       git clone https://gitlab.com/morganofbass/ocserv.git && \
       cd ocserv && \
-      apk add protobuf-c gperf apr apr-dev && \
       autoreconf -fvi && \
       ./configure --enable-saml-auth && \
       make && \
