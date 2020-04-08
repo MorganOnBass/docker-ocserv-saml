@@ -73,8 +73,15 @@ RUN buildDeps=" \
 			| awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
 			| xargs -r apk info --installed \
 			| sort -u \
-		)" && \
-      apk add --update --virtual .run-deps $runDeps gnutls-utils iptables xmlsec libxml2 rsync sipcalc && \
+		) \
+            gnutls-utils \
+            iptables \
+            xmlsec \
+            libxml2 \
+            rsync \
+            sipcalc \
+            libnl3" && \
+      apk add --update --virtual .run-deps $runDeps && \
       apk del .build-deps && \
       rm -rf /var/cache/apk/* && \
       rm -rf /tmp/*
