@@ -74,7 +74,7 @@ RUN buildDeps=" \
 			| xargs -r apk info --installed \
 			| sort -u \
 		)" && \
-      apk add --update --virtual .run-deps $runDeps gnutls-utils iptables xmlsec libxml2 rsync sipcalc && \
+      apk add --update --virtual .run-deps $runDeps gnutls-utils iptables xmlsec libxml2 rsync sipcalc libnl3 && \
       apk del .build-deps && \
       rm -rf /var/cache/apk/* && \
       rm -rf /tmp/*
