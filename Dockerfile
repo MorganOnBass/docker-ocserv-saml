@@ -79,7 +79,8 @@ RUN buildDeps=" \
             libxml2 \
             rsync \
             sipcalc \
-            libnl3" && \
+            libnl3 \
+            bash" && \
       apk add --update --virtual .run-deps $runDeps && \
       apk del .build-deps && \
       rm -rf /var/cache/apk/* && \

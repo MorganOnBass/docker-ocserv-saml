@@ -13,7 +13,7 @@ OpenConnect VPN server is an SSL VPN server that is secure, small, fast and conf
 * Base: Alpine Latest
 * Latest OpenConnect Server 1.0.0 + SAML support implemented by me, [here](https://gitlab.com/morganofbass/ocserv)
 * SAML2 Authentication Support
-* Size: 57MB
+* Size: 47.5MB
 * Customizing the DNS servers used for queries over the VPN
 * Supports tunneling all traffic over the VPN or tunneling only specific routes via split-include
 * Create certs automatically using default or provided values, or drop your own certs in /config/certs
