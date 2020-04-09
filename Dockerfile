@@ -23,22 +23,22 @@ RUN buildDeps=" \
             xmlsec-dev \
             zlib-dev \
             git \
-		curl \
-		g++ \
+            curl \
+            g++ \
             glib-dev \
-		gawk \
-		gnutls-dev \
-		gpgme \
-		libev-dev \
-		libnl3-dev \
-		libseccomp-dev \
-		linux-headers \
-		linux-pam-dev \
-		lz4-dev \
-		make \
-		readline-dev \
-		tar \
-		xz \
+            gawk \
+            gnutls-dev \
+            gpgme \
+            libev-dev \
+            libnl3-dev \
+            libseccomp-dev \
+            linux-headers \
+            linux-pam-dev \
+            lz4-dev \
+            make \
+            readline-dev \
+            tar \
+            xz \
             protobuf-c \
             gperf \
             apr \
@@ -68,11 +68,11 @@ RUN buildDeps=" \
       make && \
       make install && \
       runDeps="$( \
-		scanelf --needed --nobanner /usr/local/sbin/ocserv \
-			| awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-			| xargs -r apk info --installed \
-			| sort -u \
-		) \
+            scanelf --needed --nobanner /usr/local/sbin/ocserv \
+            	| awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
+            	| xargs -r apk info --installed \
+            	| sort -u \
+            ) \
             gnutls-utils \
             iptables \
             xmlsec \
